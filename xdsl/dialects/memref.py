@@ -529,6 +529,44 @@ class Subview(IRDLOperation):
     traits = frozenset((MemrefHasCanonicalizationPatternsTrait(),))
 
     # EMILY NOTES VVVVVVVVVVVVVVVVVVVV
+    #   unresolved_dynamic_sizes = parser.parse_comma_separated_list(
+    #         parser.Delimiter.PAREN, parser.parse_unresolved_operand
+    #     )
+    #     unresolved_symbol_operands = parser.parse_optional_comma_separated_list(
+    #         parser.Delimiter.SQUARE, parser.parse_unresolved_operand
+    #     )
+    #     if unresolved_symbol_operands is None:
+    #         unresolved_symbol_operands = []
+
+    #     attrs = parser.parse_optional_attr_dict()
+
+    #     parser.parse_punctuation(":")
+    #     res_type = parser.parse_attribute()
+
+    #     index = IndexType()
+    #     dynamic_sizes = tuple(
+    #         parser.resolve_operand(uop, index) for uop in unresolved_dynamic_sizes
+    #     )
+    #     symbol_operands = tuple(
+    #         parser.resolve_operand(uop, index) for uop in unresolved_symbol_operands
+    #     )
+
+    #     if "alignment" in attrs:
+    #         alignment = attrs["alignment"]
+    #         del attrs["alignment"]
+    #     else:
+    #         alignment = None
+
+    #     op = cls(
+    #         dynamic_sizes,
+    #         symbol_operands,
+    #         res_type,
+    #         alignment,
+    #     )
+
+    #     op.attributes |= attrs
+
+    #     return op
     # source, offset, sizes, strides
     # %subview = memref.subview %arg0[%arg5, %arg4] [2, 16] [1, 1] :
     # memref<16x16xi8> to memref<2x16xi8, strided<[16, 1], offset: ?>>
@@ -537,13 +575,62 @@ class Subview(IRDLOperation):
     # parse(cls, parser: Parser) -> Self:
     # CAN HANDLE:  %6 = "memref.subview"(%5)
     #                   {"operandSegmentSizes" = array<i32: 1, 0, 0, 0>, "static_offsets" = array<i64: 0, 0>, "static_sizes" = array<i64: 1, 1>, "static_strides" = array<i64: 1, 1>} : (memref<10x2xindex>) -> memref<1x1xindex>
-    # CANNOT HANDLE: %subview_1 = memref.subview %arg2[%arg5, %arg3] [2, 2] [1, 1] : memref<16x16xi32, strided<[16, 1]>> to memref<2x2xi32, strided<[16, 1], offset: ?>>
+    #     @classmethod
+    # def parse(cls, parser: Parser):
+    #     op = parser.parse_unresolved_operand()
+    #     parser.parse_punctuation(":")
+    #     result_type = parser.parse_type()
+    #     op = parser.resolve_operand(op, result_type)
+    #     return cls(op)
+
+    # def print(self, printer: Printer):
+    #     printer.print(" ")
+    #     printer.print_ssa_value(self.input)
+    #     printer.print(" : ")
+    #     printer.print(self.result.type)
+
+    # CANNOT HANDLE: %subview = memref.subview %arg0[%arg5, %arg4] [2, 16] [1, 1] : memref<16x16xi8> to memref<2x16xi8, strided<[16, 1], offset: ?>>
     # EMILY NOTES ^^^^^^^^^^^^^^^^^^^^
 
     @classmethod
     def parse(cls, parser: Parser) -> Self:
         # TODO: parse the custom meref!!!
-        print(f"\nthe operation is: \n{str(cls)}\n")
+        src = parser.parse_operand("Expected SSA Value name here!")
+        # src = parser.parse_argument()
+        offsets = parser.parse_comma_separated_list(
+            parser.Delimiter.SQUARE, parser.parse_unresolved_operand
+        )
+
+        sizes = parser.parse_comma_separated_list(
+            parser.Delimiter.SQUARE, parser.parse_integer
+        )
+        # parser.parse_integer
+        strides = parser.parse_comma_separated_list(
+            parser.Delimiter.SQUARE, parser.parse_integer
+        )
+
+        parser.parse_punctuation(":")
+        s_type = parser.parse_type()
+        print(f"subview start type is {str(s_type)}\n")
+        parser.parse_keyword("to")
+        r_type = parser.parse_type()
+        print(f"subview end type is {str(r_type)}\n")
+        #   sizes = []
+        # strides = [
+        ops = []
+        for op in offsets:
+            ops.append(parser.resolve_operand(op, IndexType()))
+            # print(f'type of offset elt is {str(type(parser.resolve_operand(op, IndexType())))}\n')
+
+        print(
+            f"\nthe operation is: \n{str(cls)}\n\
+              with type {str(type(cls))}\n \
+              and source {str(src)}\n \
+              and offsets {str(ops)}\n\
+              and sizes {str(sizes)}\n \
+              and strides {str(strides)}\n"
+        )
+        assert 1 + 1 == 3
         parser.raise_error(
             f"HOLAAAAA!!! Operation {cls.name} does not have a custom format."
         )  # EMILY
