@@ -528,6 +528,84 @@ class Subview(IRDLOperation):
 
     traits = frozenset((MemrefHasCanonicalizationPatternsTrait(),))
 
+    # EMILY NOTES VVVVVVVVVVVVVVVVVVVV
+    # source, offset, sizes, strides
+    # %subview = memref.subview %arg0[%arg5, %arg4] [2, 16] [1, 1] :
+    # memref<16x16xi8> to memref<2x16xi8, strided<[16, 1], offset: ?>>
+    # def parse(cls: type[_OperationType], parser: Parser) -> _OperationType:
+    #     parser.raise_error(f"Operation {cls.name} does not have a custom format.")
+    # parse(cls, parser: Parser) -> Self:
+    # CAN HANDLE:  %6 = "memref.subview"(%5)
+    #                   {"operandSegmentSizes" = array<i32: 1, 0, 0, 0>, "static_offsets" = array<i64: 0, 0>, "static_sizes" = array<i64: 1, 1>, "static_strides" = array<i64: 1, 1>} : (memref<10x2xindex>) -> memref<1x1xindex>
+    # CANNOT HANDLE: %subview_1 = memref.subview %arg2[%arg5, %arg3] [2, 2] [1, 1] : memref<16x16xi32, strided<[16, 1]>> to memref<2x2xi32, strided<[16, 1], offset: ?>>
+    # EMILY NOTES ^^^^^^^^^^^^^^^^^^^^
+
+    @classmethod
+    def parse(cls, parser: Parser) -> Self:
+        # TODO: parse the custom meref!!!
+        print(f"\nthe operation is: \n{str(cls)}\n")
+        parser.raise_error(
+            f"HOLAAAAA!!! Operation {cls.name} does not have a custom format."
+        )  # EMILY
+
+    @staticmethod
+    def from_non_static_parameters(
+        source: SSAValue | Operation,
+        source_type: MemRefType[Attribute],
+        offsets: Sequence[int] | Sequence[SSAValue],
+        sizes: Sequence[int] | Sequence[SSAValue],
+        strides: Sequence[int] | Sequence[SSAValue],
+        reduce_rank: bool = False,
+    ) -> Subview:
+        source = SSAValue.get(source)
+
+        source_shape = source_type.get_shape()
+        source_offset = 0
+        source_strides = [1]
+        for input_size in reversed(source_shape[1:]):
+            source_strides.insert(0, source_strides[0] * input_size)
+        if isinstance(source_type.layout, StridedLayoutAttr):
+            if isinstance(source_type.layout.offset, IntAttr):
+                source_offset = source_type.layout.offset.data
+            if isa(source_type.layout.strides, ArrayAttr[IntAttr]):
+                source_strides = [s.data for s in source_type.layout.strides]
+
+        layout_strides = [a * b for (a, b) in zip(strides, source_strides)]
+
+        layout_offset = (
+            sum(stride * offset for stride, offset in zip(source_strides, offsets))
+            + source_offset
+        )
+
+        if reduce_rank:
+            composed_strides = layout_strides
+            layout_strides: list[int] = []
+            result_sizes: list[int] = []
+
+            for stride, size in zip(composed_strides, sizes):
+                if size == 1:
+                    continue
+                layout_strides.append(stride)
+                result_sizes.append(size)
+
+        else:
+            result_sizes = list(sizes)
+
+        layout = StridedLayoutAttr(layout_strides, layout_offset)
+
+        return_type = MemRefType(
+            source_type.element_type,
+            result_sizes,
+            layout,
+            source_type.memory_space,
+        )
+
+        return Subview.build(
+            operands=[source, [], [], []],
+            result_types=[return_type],
+            properties={},
+        )
+
     @staticmethod
     def from_static_parameters(
         source: SSAValue | Operation,

@@ -699,7 +699,20 @@ class Parser(AttrParser):
             op_type = self._get_op_by_name(op_name.text)
             dialect_name = op_type.dialect_name()
             self._parser_state.dialect_stack.append(dialect_name)
+            # EMILY NOTES VVVVVVVVVVVVVVVVVVVV
+            # QUESTION: what kind of subviews end up in this if branch? Is it just any of the subviews with more than one argument?
+            #           OR does it have to do with static_offsets being present? I think it is the former.
+            # CAN HANDLE:  %6 = "memref.subview"(%5)
+            #                   {"operandSegmentSizes" = array<i32: 1, 0, 0, 0>, "static_offsets" = array<i64: 0, 0>, "static_sizes" = array<i64: 1, 1>, "static_strides" = array<i64: 1, 1>} : (memref<10x2xindex>) -> memref<1x1xindex>
+            # CANNOT HANDLE: %subview_1 = memref.subview %arg2[%arg5, %arg3] [2, 2] [1, 1] : memref<16x16xi32, strided<[16, 1]>> to memref<2x2xi32, strided<[16, 1], offset: ?>>
+            # EMILY NOTES ^^^^^^^^^^^^^^^^^^^^
+            if "memref.subview" == str(op_name.text):  # EMILY DELETE LATER!
+                print(
+                    f"found a CUSTOM OP memref.subview: {str(op_name.text)}"
+                )  # EMILY DELETE LATER!
             op = op_type.parse(self)
+            if "memref.subview" == str(op_name.text):  # EMILY DELETE LATER!
+                print("Finished parsing CUSTOM self :)\n")  # EMILY DELETE LATER!
             self._parser_state.dialect_stack.pop()
         else:
             # Generic operation format
@@ -708,8 +721,17 @@ class Parser(AttrParser):
             )
             op_type = self._get_op_by_name(op_name)
             dialect_name = op_type.dialect_name()
+            if "memref.subview" == str(op_name):  # EMILY DELETE LATER!
+                print(
+                    f"found a generic memref.subview: {str(op_name)}"
+                )  # EMILY DELETE LATER!
             self._parser_state.dialect_stack.append(dialect_name)
             op = self._parse_generic_operation(op_type)
+            if "memref.subview" == str(op_name):  # EMILY DELETE LATER!
+                print(
+                    "finished parsing generic memref.subview :)\n"
+                )  # EMILY DELETE LATER!
+
             self._parser_state.dialect_stack.pop()
 
         n_bound_results = sum(r[1] for r in bound_results)
