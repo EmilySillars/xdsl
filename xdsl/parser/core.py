@@ -731,6 +731,37 @@ class Parser(AttrParser):
                 print(
                     "finished parsing generic memref.subview :)\n"
                 )  # EMILY DELETE LATER!
+                print(f"\n{str(op)}\n")  # EMILY DELETE LATER!
+            #                 name: ClassVar[str] = field(repr=False)
+            # """The operation name. Should be a static member of the class"""
+
+            # _operands: tuple[SSAValue, ...] = field(default=())
+            # """The operation operands."""
+
+            # results:
+            # print(f'\nname: {str(op.name)}\n')
+            # print(f'\noperands: {str(op.operands)}\n')
+            # print(f'type of operands: {str(type(op.operands))}\n')
+            # print(f'v----------------------v\n')
+            # for oper in op.operands:
+            #     print(f'type: {str(type(oper))} op: {str(oper)}\n')
+            # print(f'^----------------------^\n')
+            # print(f'\nresults: {str(op.results)}\n')
+            # print(f'type of results: {str(type(op.results))}\n')
+            # print(f'v----------------------v\n')
+            # for res in op.results:
+            #     print(f'type: {str(type(res))} res: {str(res)}\n')
+            # print(f'^----------------------^\n')
+            # print(f'\nattributes: {str(op.attributes)}\n')
+            # print(f'type of attrs: {str(type(op.results))}\n')
+            # print(f'v----------------------v\n')
+            # for attr in op.attributes:
+            #     print(f'type: {str(type(attr))} res: {str(attr)}\n')
+            # print(f'^----------------------^\n')
+            # print(f'{str(op.operands[0])} with field type of {str(op.operands[0].type)}\n')
+            # print(f'{str(op.results[0])} with field type of {str(op.results[0].type)}\n')
+            # print(f'{str(op.result_types)}')
+            # assert 5 == 75 # EMILY DELETE LATER!
 
             self._parser_state.dialect_stack.pop()
 

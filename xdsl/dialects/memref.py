@@ -589,7 +589,8 @@ class Subview(IRDLOperation):
     #     printer.print(" : ")
     #     printer.print(self.result.type)
 
-    # CANNOT HANDLE: %subview = memref.subview %arg0[%arg5, %arg4] [2, 16] [1, 1] : memref<16x16xi8> to memref<2x16xi8, strided<[16, 1], offset: ?>>
+    # CANNOT HANDLE: %subview = memref.subview %arg0[%arg5, %arg4] [2, 16] [1, 1]
+    #                         : memref<16x16xi8> to memref<2x16xi8, strided<[16, 1], offset: ?>>
     # EMILY NOTES ^^^^^^^^^^^^^^^^^^^^
 
     @classmethod
@@ -611,10 +612,13 @@ class Subview(IRDLOperation):
 
         parser.parse_punctuation(":")
         s_type = parser.parse_type()
-        print(f"subview start type is {str(s_type)}\n")
+        print(f"subview start type is {str(s_type)} with attrs {str(s_type.layout)}\n")
         parser.parse_keyword("to")
         r_type = parser.parse_type()
         print(f"subview end type is {str(r_type)}\n")
+        print(
+            f"and the types of the types are {str(type(s_type))} and {str(type(r_type))}\n"
+        )
         #   sizes = []
         # strides = [
         ops = []
@@ -622,14 +626,38 @@ class Subview(IRDLOperation):
             ops.append(parser.resolve_operand(op, IndexType()))
             # print(f'type of offset elt is {str(type(parser.resolve_operand(op, IndexType())))}\n')
 
+        # print(f'{str(op.operands[0])} with field type of {str(op.operands[0].type)}\n')
+        # print(f'{str(op.results[0])} with field type of {str(op.results[0].type)}\n')
         print(
             f"\nthe operation is: \n{str(cls)}\n\
               with type {str(type(cls))}\n \
+              with type of 1st operand {str(s_type)}\n \
+              with type of result {str(r_type)}\n \
               and source {str(src)}\n \
               and offsets {str(ops)}\n\
               and sizes {str(sizes)}\n \
               and strides {str(strides)}\n"
         )
+        strides_from_result = r_type.layout.strides
+        layout = StridedLayoutAttr(strides_from_result, None)
+        # layout = StridedLayoutAttr(strides, None)
+        return_type = MemRefType(
+            s_type.element_type,
+            sizes,
+            layout,
+            s_type.memory_space,
+        )
+        print(f"return type is tentatively {str(return_type)}\n")
+        # I think the strides parameter I'm using is wrong!! BEWARE!
+
+        subv = Subview.build(
+            operands=[src, [], [], []],
+            result_types=[return_type],
+            properties={},
+        )
+
+        print(f"subview built is  {str(subv)}\n")
+
         assert 1 + 1 == 3
         parser.raise_error(
             f"HOLAAAAA!!! Operation {cls.name} does not have a custom format."
