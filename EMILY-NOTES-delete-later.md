@@ -73,7 +73,39 @@ Do:
 Things to fix:
 
 1. offset list OPERAND holding SSA variables missing
+
+   OpResult
+
+   how are operations BUILT? how do they take in a block arg?
+
+   ```
+   i32_ssa_var = Constant(IntegerAttr.from_int_and_width(62, 32), i32)
+   my_addi32 = Addi32.build(
+       operands=[i32_ssa_var.result, i32_ssa_var.result], result_types=[i32]
+   )
+   printer.print_op(i32_ssa_var)
+   print()
+   printer.print_op(my_addi32)
+   ---------------------------------
+   %0 = arith.constant 62 : i32
+   %1 = "arith.addi32"(%0, %0) : (i32, i32) -> i32
+   ```
+
+   maybe this is helpful too:
+
+   ```
+   def test_var_operand_builder():
+       op1 = ResultOp.build(result_types=[StringAttr("0")])
+       op2 = VarOperandOp.build(operands=[[op1, op1]])
+       op2.verify()
+       assert tuple(op2.operands) == (op1.res, op1.res)
+   ```
+
+   
+
 2. strides OPERAND missing
+
+3. get rid of operand segment sizes?
 
 ## hoodle
 

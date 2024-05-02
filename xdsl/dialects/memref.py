@@ -5,6 +5,7 @@ from typing import Annotated, cast
 
 from typing_extensions import Self
 
+# probably shouldn't import this
 from xdsl.dialects.builtin import (
     AnyIntegerAttr,
     ArrayAttr,
@@ -605,7 +606,14 @@ class Subview(IRDLOperation):
         sizes = parser.parse_comma_separated_list(
             parser.Delimiter.SQUARE, parser.parse_integer
         )
+        # sizes2 = [Constant.from_int_and_width(0, IndexType()),Constant.from_int_and_width(3, IndexType())]
         # parser.parse_integer
+        # def from_index_int_value(value: int) -> IntegerAttr[IndexType]:
+        #         return IntegerAttr(value, IndexType())
+        sizes2 = []
+        for sz in sizes:
+            sizes2.append(IntegerAttr(sz, IndexType()))
+
         strides = parser.parse_comma_separated_list(
             parser.Delimiter.SQUARE, parser.parse_integer
         )
@@ -630,12 +638,13 @@ class Subview(IRDLOperation):
         # print(f'{str(op.results[0])} with field type of {str(op.results[0].type)}\n')
         print(
             f"\nthe operation is: \n{str(cls)}\n\
-              with type {str(type(cls))}\n \
-              with type of 1st operand {str(s_type)}\n \
-              with type of result {str(r_type)}\n \
-              and source {str(src)}\n \
+              with type {str(type(cls))}\n\
+              with type of 1st operand {str(s_type)}\n\
+              with type of result {str(r_type)}\n\
+              and source {str(src)}\n\
               and offsets {str(ops)}\n\
-              and sizes {str(sizes)}\n \
+              and sizes {str(sizes)} w/ elt type {str(type(sizes[0]))}\n\
+              and sizes2 {str(sizes)} w/ elt type {str(type(sizes2[0]))}\n\
               and strides {str(strides)}\n"
         )
         strides_from_result = r_type.layout.strides
@@ -650,8 +659,16 @@ class Subview(IRDLOperation):
         print(f"return type is tentatively {str(return_type)}\n")
         # I think the strides parameter I'm using is wrong!! BEWARE!
 
+        # test = var_operand_def(ops)
+        # test = tuple(SSAValue.get(ds) for ds in ops)
+        #  test = IndexCastOp(sizes[0], IndexType())
+        test = DenseArrayBase.from_list(IntegerAttr, sizes2)
+        print(f"test is {str(test)}\n")
+        # tuple(SSAValue.get(ds) for ds in dynamic_sizes),
+
         subv = Subview.build(
-            operands=[src, [], [], []],
+            # operands=[src, [], [], []],
+            operands=[src, ops, [], []],
             result_types=[return_type],
             properties={},
         )

@@ -732,6 +732,10 @@ class Parser(AttrParser):
                     "finished parsing generic memref.subview :)\n"
                 )  # EMILY DELETE LATER!
                 print(f"\n{str(op)}\n")  # EMILY DELETE LATER!
+            if "memref.collapse_shape" == str(op_name):  # EMILY DELETE LATER!!
+                print(
+                    "finished parsing generic memref.collapse_shape :)\n"
+                )  # EMILY DELETE LATER!
             #                 name: ClassVar[str] = field(repr=False)
             # """The operation name. Should be a static member of the class"""
 
