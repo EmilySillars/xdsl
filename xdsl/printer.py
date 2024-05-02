@@ -749,6 +749,11 @@ class Printer:
         self.print_attr_dict(attributes)
 
     def print_op_with_default_format(self, op: Operation) -> None:
+        # print(f'OPERANDS ARE {str(op.operands)} with length {str(len(op.operands))}\n') # EMILY
+        if op.name == "memref.subview":
+            print(
+                f"\tinside print_op_w_default_format: subview op has type {str(type(op))}\n"
+            )
         self.print_operands(op.operands)
         self.print_successors(op.successors)
         if not self.print_properties_as_attributes:
@@ -824,6 +829,13 @@ class Printer:
             self.print(" loc(unknown)")
 
     def print_op(self, op: Operation) -> None:
+        if op.name == "memref.subview":
+            print("printing a subview op!!\n")
+            print(
+                f"\tself.print_generic_format is {str( self.print_generic_format)}\n\
+                \tOperation.print is {str(Operation.print)}\n\
+                \ttype(op).print is {str(type(op).print)}\n    "
+            )
         begin_op_pos = self._current_column
         self._print_results(op)
         use_custom_format = False
@@ -846,6 +858,15 @@ class Printer:
             self.print_op_with_default_format(op)
             op.attributes["op_name__"] = op_name
         elif use_custom_format:
+            if op.name == "memref.subview":
+                print(
+                    f"\tuse custom format: inside print_op, op has type {str(type(op))}\n"
+                )
+            # self.print_op_with_default_format(op)
             op.print(self)
         else:
+            if op.name == "memref.subview":
+                print(
+                    f"\tgeneric format: inside print_op, op has type {str(type(op))}\n"
+                )
             self.print_op_with_default_format(op)

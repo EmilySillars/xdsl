@@ -533,6 +533,36 @@ class Subview(IRDLOperation):
 
     traits = frozenset((MemrefHasCanonicalizationPatternsTrait(),))
 
+    def print(self, printer: Printer):
+        print("\nHOODLE!!\n")
+        # print(f'MY operands field has length {str(len(self.operands))}\n')
+        #  print(f'\tinside print, subviews type is {str(type(self))}\n')
+        printer.print("(")
+        printer.print("source")
+        # printer.print_operand(self.operands[0])
+        # printer.print_list(self.operands, printer.print_operand)
+        printer.print(")")
+        printer.print("[")
+        printer.print("offsets")
+        printer.print("]")
+        printer.print(" ")
+        printer.print("[")
+        printer.print("sizes")
+        printer.print("]")
+        printer.print(" ")
+        printer.print("[")
+        printer.print("strides")
+        printer.print("]")
+        printer.print(" ")
+        printer.print(": ")
+        printer.print("<source type>")
+        printer.print(" ")
+        printer.print("to ")
+        printer.print("<result type>")
+        return printer
+
+    #  return printer.print_op_with_default_format(self)
+
     # EMILY NOTES VVVVVVVVVVVVVVVVVVVV
     # _parse_generic_operation
     #  can handle: %6 = "memref.subview"(%5)
@@ -599,11 +629,15 @@ class Subview(IRDLOperation):
                 "static_offsets": DenseArrayBase.from_list(i64, []),
                 "static_sizes": DenseArrayBase.from_list(i64, []),
                 "static_strides": DenseArrayBase.from_list(i64, []),
+                # "sizes": sizes,
+                # "strides": strides,
                 "sizes": DenseArrayBase.from_list(i64, sizes),
                 "strides": DenseArrayBase.from_list(i64, strides),
             },  # pretty sure the type should be IndexType() here,
             # but this throws an error, so let's keep i64 for now...
         )
+
+        print(f"subvs operands field has length {str(len(subv.operands))}\n")
 
         print(f"subview built is  {str(subv)}\n")
         return subv

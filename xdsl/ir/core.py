@@ -1059,6 +1059,7 @@ class Operation(IRNode):
         parser.raise_error(f"Operation {cls.name} does not have a custom format.")
 
     def print(self, printer: Printer):
+        print(f"my type inside print is {str(type(self))}\n")  # EMILY
         return printer.print_op_with_default_format(self)
 
     def clone_without_regions(
