@@ -530,145 +530,59 @@ class Subview(IRDLOperation):
     traits = frozenset((MemrefHasCanonicalizationPatternsTrait(),))
 
     # EMILY NOTES VVVVVVVVVVVVVVVVVVVV
-    #   unresolved_dynamic_sizes = parser.parse_comma_separated_list(
-    #         parser.Delimiter.PAREN, parser.parse_unresolved_operand
-    #     )
-    #     unresolved_symbol_operands = parser.parse_optional_comma_separated_list(
-    #         parser.Delimiter.SQUARE, parser.parse_unresolved_operand
-    #     )
-    #     if unresolved_symbol_operands is None:
-    #         unresolved_symbol_operands = []
-
-    #     attrs = parser.parse_optional_attr_dict()
-
-    #     parser.parse_punctuation(":")
-    #     res_type = parser.parse_attribute()
-
-    #     index = IndexType()
-    #     dynamic_sizes = tuple(
-    #         parser.resolve_operand(uop, index) for uop in unresolved_dynamic_sizes
-    #     )
-    #     symbol_operands = tuple(
-    #         parser.resolve_operand(uop, index) for uop in unresolved_symbol_operands
-    #     )
-
-    #     if "alignment" in attrs:
-    #         alignment = attrs["alignment"]
-    #         del attrs["alignment"]
-    #     else:
-    #         alignment = None
-
-    #     op = cls(
-    #         dynamic_sizes,
-    #         symbol_operands,
-    #         res_type,
-    #         alignment,
-    #     )
-
-    #     op.attributes |= attrs
-
-    #     return op
-    # source, offset, sizes, strides
-    # %subview = memref.subview %arg0[%arg5, %arg4] [2, 16] [1, 1] :
-    # memref<16x16xi8> to memref<2x16xi8, strided<[16, 1], offset: ?>>
-    # def parse(cls: type[_OperationType], parser: Parser) -> _OperationType:
-    #     parser.raise_error(f"Operation {cls.name} does not have a custom format.")
-    # parse(cls, parser: Parser) -> Self:
-    # CAN HANDLE:  %6 = "memref.subview"(%5)
-    #                   {"operandSegmentSizes" = array<i32: 1, 0, 0, 0>, "static_offsets" = array<i64: 0, 0>, "static_sizes" = array<i64: 1, 1>, "static_strides" = array<i64: 1, 1>} : (memref<10x2xindex>) -> memref<1x1xindex>
-    #     @classmethod
-    # def parse(cls, parser: Parser):
-    #     op = parser.parse_unresolved_operand()
-    #     parser.parse_punctuation(":")
-    #     result_type = parser.parse_type()
-    #     op = parser.resolve_operand(op, result_type)
-    #     return cls(op)
-
-    # def print(self, printer: Printer):
-    #     printer.print(" ")
-    #     printer.print_ssa_value(self.input)
-    #     printer.print(" : ")
-    #     printer.print(self.result.type)
-
-    # CANNOT HANDLE: %subview = memref.subview %arg0[%arg5, %arg4] [2, 16] [1, 1]
-    #                         : memref<16x16xi8> to memref<2x16xi8, strided<[16, 1], offset: ?>>
+    # _parse_generic_operation
+    #  can handle: %6 = "memref.subview"(%5)
+    #                   {"operandSegmentSizes" = array<i32: 1, 0, 0, 0>,
+    #                    "static_offsets" = array<i64: 0, 0>,
+    #                    "static_sizes" = array<i64: 1, 1>,
+    #                    "static_strides" = array<i64: 1, 1>}
+    #                   : (memref<10x2xindex>) -> memref<1x1xindex>
+    #
+    # Now I want to make parse
+    # handle: %subview = memref.subview %arg0[%arg5, %arg4] [2, 16] [1, 1]
+    #                    : memref<16x16xi8> to memref<2x16xi8, strided<[16, 1], offset: ?>>
     # EMILY NOTES ^^^^^^^^^^^^^^^^^^^^
 
     @classmethod
     def parse(cls, parser: Parser) -> Self:
-        # TODO: parse the custom meref!!!
+        # parse source operand
         src = parser.parse_operand("Expected SSA Value name here!")
-        # src = parser.parse_argument()
+        # parse offsets as a list of unresolved operands
         offsets = parser.parse_comma_separated_list(
             parser.Delimiter.SQUARE, parser.parse_unresolved_operand
         )
-
+        # parse sizes as a list of integers
         sizes = parser.parse_comma_separated_list(
             parser.Delimiter.SQUARE, parser.parse_integer
         )
-        # sizes2 = [Constant.from_int_and_width(0, IndexType()),Constant.from_int_and_width(3, IndexType())]
-        # parser.parse_integer
-        # def from_index_int_value(value: int) -> IntegerAttr[IndexType]:
-        #         return IntegerAttr(value, IndexType())
-        sizes2 = []
-        for sz in sizes:
-            sizes2.append(IntegerAttr(sz, IndexType()))
-
-        strides = parser.parse_comma_separated_list(
-            parser.Delimiter.SQUARE, parser.parse_integer
-        )
-
+        # parse strides as a list of integers
+        parser.parse_comma_separated_list(parser.Delimiter.SQUARE, parser.parse_integer)
         parser.parse_punctuation(":")
+        # parse the type of the source operand
         s_type = parser.parse_type()
-        print(f"subview start type is {str(s_type)} with attrs {str(s_type.layout)}\n")
         parser.parse_keyword("to")
+        # parse the type of the result of the subview
         r_type = parser.parse_type()
-        print(f"subview end type is {str(r_type)}\n")
-        print(
-            f"and the types of the types are {str(type(s_type))} and {str(type(r_type))}\n"
-        )
-        #   sizes = []
-        # strides = [
-        ops = []
-        for op in offsets:
-            ops.append(parser.resolve_operand(op, IndexType()))
-            # print(f'type of offset elt is {str(type(parser.resolve_operand(op, IndexType())))}\n')
 
-        # print(f'{str(op.operands[0])} with field type of {str(op.operands[0].type)}\n')
-        # print(f'{str(op.results[0])} with field type of {str(op.results[0].type)}\n')
-        print(
-            f"\nthe operation is: \n{str(cls)}\n\
-              with type {str(type(cls))}\n\
-              with type of 1st operand {str(s_type)}\n\
-              with type of result {str(r_type)}\n\
-              and source {str(src)}\n\
-              and offsets {str(ops)}\n\
-              and sizes {str(sizes)} w/ elt type {str(type(sizes[0]))}\n\
-              and sizes2 {str(sizes)} w/ elt type {str(type(sizes2[0]))}\n\
-              and strides {str(strides)}\n"
-        )
-        strides_from_result = r_type.layout.strides
-        layout = StridedLayoutAttr(strides_from_result, None)
-        # layout = StridedLayoutAttr(strides, None)
+        # resolve each of the elements in the offsets operand, and store them in offs
+        offs = []
+        for off in offsets:
+            offs.append(parser.resolve_operand(off, IndexType()))
+
+        # create subview return type object
+        r_type_strides = r_type.layout.strides
+        layout = StridedLayoutAttr(r_type_strides, None)
         return_type = MemRefType(
             s_type.element_type,
             sizes,
             layout,
             s_type.memory_space,
         )
-        print(f"return type is tentatively {str(return_type)}\n")
-        # I think the strides parameter I'm using is wrong!! BEWARE!
 
-        # test = var_operand_def(ops)
-        # test = tuple(SSAValue.get(ds) for ds in ops)
-        #  test = IndexCastOp(sizes[0], IndexType())
-        test = DenseArrayBase.from_list(IntegerAttr, sizes2)
-        print(f"test is {str(test)}\n")
-        # tuple(SSAValue.get(ds) for ds in dynamic_sizes),
-
+        # build the subview object
         subv = Subview.build(
-            # operands=[src, [], [], []],
-            operands=[src, ops, [], []],
+            operands=[src, offs, sizes, []],
+            # operands=[src, offs, [], []],
             result_types=[return_type],
             properties={},
         )
@@ -676,9 +590,7 @@ class Subview(IRDLOperation):
         print(f"subview built is  {str(subv)}\n")
 
         assert 1 + 1 == 3
-        parser.raise_error(
-            f"HOLAAAAA!!! Operation {cls.name} does not have a custom format."
-        )  # EMILY
+        parser.raise_error(f"Operation {cls.name} does not have a custom format.")
 
     @staticmethod
     def from_non_static_parameters(
@@ -1005,3 +917,23 @@ MemRef = Dialect(
     ],
     [],
 )
+
+# DEBUGGING NOTES; DELETE LATER VVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+# print(f"subview start type is {str(s_type)} with attrs {str(s_type.layout)}\n")
+# print(f"subview end type is {str(r_type)}\n")
+# print(
+#     f"and the types of the types are {str(type(s_type))} and {str(type(r_type))}\n"
+# )
+
+#      print(
+#     f"\nthe operation is: \n{str(cls)}\n\
+#       with type {str(type(cls))}\n\
+#       with type of 1st operand {str(s_type)}\n\
+#       with type of result {str(r_type)}\n\
+#       and source {str(src)}\n\
+#       and offsets {str(ops)}\n\
+#       and sizes {str(sizes)} w/ elt type {str(type(sizes[0]))}\n\
+#       and sizes2 {str(sizes)} w/ elt type {str(type(sizes2[0]))}\n\
+#       and strides {str(strides)}\n"
+# )
+# DEBUGGING NOTES; DELETE LATER ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
