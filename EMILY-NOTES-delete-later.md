@@ -64,11 +64,12 @@ Want:
 ```
 
 Do:
+```
+%subview = "memref.subview"(%arg0, %arg5, %arg4) <{"static_offsets" = array<i64>, "static_sizes" = array<i64>, "static_strides" = array<i64>, "sizes" = array<i64: 2, 16>, "strides" = array<i64: 1, 1>, "operandSegmentSizes" = array<i32: 1, 2, 0, 0>}> : (memref<16x16xi8>, index, index) -> memref<2x16xi8, strided<[16, 1], offset: ?>>
+```
 
-```
-%0 = "memref.subview"(%arg0) <{"operandSegmentSizes" = array<i32: 1, 0, 0, 0>}> 
-: (memref<16x16xi8>) -> memref<2x16xi8, strided<[16, 1], offset: ?>>
-```
+~~%0 = "memref.subview"(%arg0) <{"operandSegmentSizes" = array<i32: 1, 0, 0, 0>}>~~ 
+~~: (memref<16x16xi8>) -> memref<2x16xi8, strided<[16, 1], offset: ?>>~~
 
 Things to fix:
 
@@ -103,16 +104,27 @@ Things to fix:
 
    
 
-2. strides OPERAND missing
+## Python Object for Custom vs. Generic Subview
 
-3. get rid of operand segment sizes?
-
-## hoodle
+parsing custom subview and adding sizes to the properties dicitonary:
 
 ```
-operands: 
-OpOperands(
-_op=Subview(_operands=(<OpResult[memref<10x2xindex>] index: 0, operation: memref.alloc, uses: 2>,), 
-results=[<OpResult[memref<1x1xindex>] index: 0, operation: memref.subview, uses: 0>], successors=[], properties={'static_offsets': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=0), IntAttr(data=0)))), elt_type=IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=0), IntAttr(data=0)))), 'static_sizes': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=1), IntAttr(data=1)))), elt_type=IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=1), IntAttr(data=1)))), 'static_strides': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=1), IntAttr(data=1)))), elt_type=IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=1), IntAttr(data=1)))), 'operandSegmentSizes': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=32), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=32), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=1), IntAttr(data=0), IntAttr(data=0), IntAttr(data=0)))), elt_type=IntegerType(parameters=(IntAttr(data=32), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=32), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=1), IntAttr(data=0), IntAttr(data=0), IntAttr(data=0))))}, attributes={}, regions=[]))
+Subview(_operands=(<BlockArgument[memref<16x16xi8>] index: 0, uses: 1>, <BlockArgument[index] index: 0, uses: 1>, <BlockArgument[index] index: 0, uses: 1>), results=[<OpResult[memref<2x16xi8, strided<[16, 1], offset: ?>>] index: 0, operation: memref.subview, uses: 0>], successors=[], properties={'sizes': [2, 16], 'operandSegmentSizes': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=32), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=32), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=1), IntAttr(data=2), IntAttr(data=0), IntAttr(data=0)))), elt_type=IntegerType(parameters=(IntAttr(data=32), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=32), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=1), IntAttr(data=2), IntAttr(data=0), IntAttr(data=0))))}, attributes={}, regions=[])
 ```
 
+parsing generic subview and looking at its python representation:
+
+```
+Subview(_operands=(<OpResult[memref<10x2xindex>] index: 0, operation: memref.alloc, uses: 2>,), results=[<OpResult[memref<1x1xindex>] index: 0, operation: memref.subview, uses: 0>], successors=[], properties={'static_offsets': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=0), IntAttr(data=0)))), elt_type=IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=0), IntAttr(data=0)))), 'static_sizes': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=1), IntAttr(data=1)))), elt_type=IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=1), IntAttr(data=1)))), 'static_strides': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=1), IntAttr(data=1)))), elt_type=IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=1), IntAttr(data=1)))), 'operandSegmentSizes': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=32), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=32), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=1), IntAttr(data=0), IntAttr(data=0), IntAttr(data=0)))), elt_type=IntegerType(parameters=(IntAttr(data=32), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=32), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=1), IntAttr(data=0), IntAttr(data=0), IntAttr(data=0))))}, attributes={}, regions=[])
+```
+
+## Next Steps:
+
+- modify printer.py so that it prints memref.subviews in a custom format-y way.
+
+- handle case where we have operands as sizes: e.g. `[%arg0, %arg5, %arg5]`
+- handle the case where we have property sizes: e.g. [6, 5]
+- make sure sizes_operand and sizes cannot both be empty at same time
+- *don't* print empty properties when printing for custom format
+- Can we have a mix of SSA values and integers in the same list for any of the arguments?? e.g. `[%arg0, 85, 9]`
+- Figure out how to call my forked xDSL repo from my forked snax-mlir repo.

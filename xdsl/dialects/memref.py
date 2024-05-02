@@ -518,8 +518,12 @@ class Subview(IRDLOperation):
 
     source: Operand = operand_def(MemRefType)
     offsets: VarOperand = var_operand_def(IndexType)
-    sizes: VarOperand = var_operand_def(IndexType)
-    strides: VarOperand = var_operand_def(IndexType)
+    sizes_ssa: VarOperand = var_operand_def(IndexType)
+    strides_ssa: VarOperand = var_operand_def(
+        IndexType
+    )  # maybe these need to sometimes be properties!?????
+    sizes: DenseArrayBase = prop_def(DenseArrayBase)
+    strides: DenseArrayBase = prop_def(DenseArrayBase)
     static_offsets: DenseArrayBase = prop_def(DenseArrayBase)
     static_sizes: DenseArrayBase = prop_def(DenseArrayBase)
     static_strides: DenseArrayBase = prop_def(DenseArrayBase)
@@ -556,7 +560,9 @@ class Subview(IRDLOperation):
             parser.Delimiter.SQUARE, parser.parse_integer
         )
         # parse strides as a list of integers
-        parser.parse_comma_separated_list(parser.Delimiter.SQUARE, parser.parse_integer)
+        strides = parser.parse_comma_separated_list(
+            parser.Delimiter.SQUARE, parser.parse_integer
+        )
         parser.parse_punctuation(":")
         # parse the type of the source operand
         s_type = parser.parse_type()
@@ -578,19 +584,31 @@ class Subview(IRDLOperation):
             layout,
             s_type.memory_space,
         )
-
+        if isinstance(IndexType(), IndexType):
+            print("I do indeed know what an index type is.")
+            print(
+                f"and sizes is of type {str(type(sizes))} with elt type {str(type(sizes[0]))}\n"
+            )
         # build the subview object
         subv = Subview.build(
-            operands=[src, offs, sizes, []],
-            # operands=[src, offs, [], []],
+            # operands=[src, offs, sizes, []],
+            operands=[src, offs, [], []],
             result_types=[return_type],
-            properties={},
+            # properties={}
+            properties={
+                "static_offsets": DenseArrayBase.from_list(i64, []),
+                "static_sizes": DenseArrayBase.from_list(i64, []),
+                "static_strides": DenseArrayBase.from_list(i64, []),
+                "sizes": DenseArrayBase.from_list(i64, sizes),
+                "strides": DenseArrayBase.from_list(i64, strides),
+            },  # pretty sure the type should be IndexType() here,
+            # but this throws an error, so let's keep i64 for now...
         )
 
         print(f"subview built is  {str(subv)}\n")
-
-        assert 1 + 1 == 3
-        parser.raise_error(f"Operation {cls.name} does not have a custom format.")
+        return subv
+        # assert 1 + 1 == 3
+        # parser.raise_error(f"Operation {cls.name} does not have a custom format.")
 
     @staticmethod
     def from_non_static_parameters(
