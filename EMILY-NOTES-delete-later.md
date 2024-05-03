@@ -16,43 +16,22 @@ To run non-failing test case:
 ```
 xdsl-opt tests/filecheck/dialects/memref/memref_ops.mlir
 ```
-## Need to parse a memref.subview
-Its type is similar to a cast, right? 
+## Need to parse a custom format memref.subview, then print it back out
 
-What does that look like in xDSL? 
-
-Can I print the IR before it becomes MLIR?
-
-## hoo hoo!
-```
-%0 = "memref.subview"(%1) <{"static_offsets" = array<i64: 0, 0>, "static_sizes" = array<i64: 1, 1>, "static_strides" = array<i64: 1, 1>, "operandSegmentSizes" = array<i32: 1, 0, 0, 0>}> : (memref<10x2xindex>) -> memref<1x1xindex>
-
-
-name: memref.subview
-
-
-operands: OpOperands(_op=Subview(_operands=(<OpResult[memref<10x2xindex>] index: 0, operation: memref.alloc, uses: 2>,), results=[<OpResult[memref<1x1xindex>] index: 0, operation: memref.subview, uses: 0>], successors=[], properties={'static_offsets': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=0), IntAttr(data=0)))), elt_type=IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=0), IntAttr(data=0)))), 'static_sizes': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=1), IntAttr(data=1)))), elt_type=IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=1), IntAttr(data=1)))), 'static_strides': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=1), IntAttr(data=1)))), elt_type=IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=1), IntAttr(data=1)))), 'operandSegmentSizes': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=32), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=32), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=1), IntAttr(data=0), IntAttr(data=0), IntAttr(data=0)))), elt_type=IntegerType(parameters=(IntAttr(data=32), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=32), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=1), IntAttr(data=0), IntAttr(data=0), IntAttr(data=0))))}, attributes={}, regions=[]))
-
-type of operands: <class 'xdsl.ir.core.OpOperands'>
-
-v----------------------v
-
-type: <class 'xdsl.ir.core.OpResult'> op: <OpResult[memref<10x2xindex>] index: 0, operation: memref.alloc, uses: 2>
-
-^----------------------^
-
-
-results: [<OpResult[memref<1x1xindex>] index: 0, operation: memref.subview, uses: 0>]
-
-type of results: <class 'list'>
-
-v----------------------v
-
-type: <class 'xdsl.ir.core.OpResult'> res: <OpResult[memref<1x1xindex>] index: 0, operation: memref.subview, uses: 0>
-
-^----------------------^
+Relevant Input:
 
 ```
+%subview = memref.subview %arg0[%arg5, %arg4] [2, 16] [1, 1] 
+: memref<16x16xi8> to memref<2x16xi8, strided<[16, 1], offset: ?>>
+
+%subview_0 = memref.subview %arg1[%arg4, %arg3] [16, 2] [1, 1] 
+: memref<16x16xi8, strided<[1, 16]>> to memref<16x2xi8, strided<[1, 16], offset: ?>>
+
+%subview_1 = memref.subview %arg2[%arg5, %arg3] [2, 2] [1, 1] 
+: memref<16x16xi32, strided<[16, 1]>> to memref<2x2xi32, strided<[16, 1], offset: ?>>          
+```
+
+
 
 ## What I *want* to generate vs. What I *do*
 
@@ -65,46 +44,24 @@ Want:
 
 Do:
 ```
-%subview = "memref.subview"(%arg0, %arg5, %arg4) <{"static_offsets" = array<i64>, "static_sizes" = array<i64>, "static_strides" = array<i64>, "sizes" = array<i64: 2, 16>, "strides" = array<i64: 1, 1>, "operandSegmentSizes" = array<i32: 1, 2, 0, 0>}> : (memref<16x16xi8>, index, index) -> memref<2x16xi8, strided<[16, 1], offset: ?>>
+%subview = "memref.subview"(%arg0, %arg5, %arg4) 
+<{"static_offsets" = array<i64>, "static_sizes" = array<i64>, "static_strides" = array<i64>, 
+"sizes" = array<i64: 2, 16>, 
+"strides" = array<i64: 1, 1>, 
+"operandSegmentSizes" = array<i32: 1, 2, 0, 0>}> 
+: (memref<16x16xi8>, index, index) -> memref<2x16xi8, strided<[16, 1], offset: ?>>
 ```
 
-~~%0 = "memref.subview"(%arg0) <{"operandSegmentSizes" = array<i32: 1, 0, 0, 0>}>~~ 
-~~: (memref<16x16xi8>) -> memref<2x16xi8, strided<[16, 1], offset: ?>>~~
+After editing printer a bit, output looks like:
 
-Things to fix:
+```
+%subview = memref.subview(source)[offsets] [sizes] [strides] 
+: <source type> to <result type>
+```
 
-1. offset list OPERAND holding SSA variables missing
+^ Just need to replace strings with the corresponding parts now!
 
-   OpResult
-
-   how are operations BUILT? how do they take in a block arg?
-
-   ```
-   i32_ssa_var = Constant(IntegerAttr.from_int_and_width(62, 32), i32)
-   my_addi32 = Addi32.build(
-       operands=[i32_ssa_var.result, i32_ssa_var.result], result_types=[i32]
-   )
-   printer.print_op(i32_ssa_var)
-   print()
-   printer.print_op(my_addi32)
-   ---------------------------------
-   %0 = arith.constant 62 : i32
-   %1 = "arith.addi32"(%0, %0) : (i32, i32) -> i32
-   ```
-
-   maybe this is helpful too:
-
-   ```
-   def test_var_operand_builder():
-       op1 = ResultOp.build(result_types=[StringAttr("0")])
-       op2 = VarOperandOp.build(operands=[[op1, op1]])
-       op2.verify()
-       assert tuple(op2.operands) == (op1.res, op1.res)
-   ```
-
-   
-
-## Python Object for Custom vs. Generic Subview
+## Python Object for Custom Subview vs. Generic Subview
 
 parsing custom subview and adding sizes to the properties dicitonary:
 
@@ -174,7 +131,74 @@ For reference:
         self.print_operation_type(op)
 ```
 
-# why am i getting an error where operands is not iterable??
+## Miscellaneous Notes
+
+~~%0 = "memref.subview"(%arg0) <{"operandSegmentSizes" = array<i32: 1, 0, 0, 0>}>~~ 
+~~: (memref<16x16xi8>) -> memref<2x16xi8, strided<[16, 1], offset: ?>>~~
+
+Things to fix:
+
+1. offset list OPERAND holding SSA variables missing
+
+   OpResult
+
+   how are operations BUILT? how do they take in a block arg?
+
+   ```
+   i32_ssa_var = Constant(IntegerAttr.from_int_and_width(62, 32), i32)
+   my_addi32 = Addi32.build(
+       operands=[i32_ssa_var.result, i32_ssa_var.result], result_types=[i32]
+   )
+   printer.print_op(i32_ssa_var)
+   print()
+   printer.print_op(my_addi32)
+   ---------------------------------
+   %0 = arith.constant 62 : i32
+   %1 = "arith.addi32"(%0, %0) : (i32, i32) -> i32
+   ```
+
+   maybe this is helpful too:
+
+   ```
+   def test_var_operand_builder():
+       op1 = ResultOp.build(result_types=[StringAttr("0")])
+       op2 = VarOperandOp.build(operands=[[op1, op1]])
+       op2.verify()
+       assert tuple(op2.operands) == (op1.res, op1.res)
+   ```
+
+   
+
+```
+%0 = "memref.subview"(%1) <{"static_offsets" = array<i64: 0, 0>, "static_sizes" = array<i64: 1, 1>, "static_strides" = array<i64: 1, 1>, "operandSegmentSizes" = array<i32: 1, 0, 0, 0>}> : (memref<10x2xindex>) -> memref<1x1xindex>
+
+
+name: memref.subview
+
+
+operands: OpOperands(_op=Subview(_operands=(<OpResult[memref<10x2xindex>] index: 0, operation: memref.alloc, uses: 2>,), results=[<OpResult[memref<1x1xindex>] index: 0, operation: memref.subview, uses: 0>], successors=[], properties={'static_offsets': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=0), IntAttr(data=0)))), elt_type=IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=0), IntAttr(data=0)))), 'static_sizes': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=1), IntAttr(data=1)))), elt_type=IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=1), IntAttr(data=1)))), 'static_strides': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=1), IntAttr(data=1)))), elt_type=IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=1), IntAttr(data=1)))), 'operandSegmentSizes': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=32), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=32), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=1), IntAttr(data=0), IntAttr(data=0), IntAttr(data=0)))), elt_type=IntegerType(parameters=(IntAttr(data=32), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=32), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=1), IntAttr(data=0), IntAttr(data=0), IntAttr(data=0))))}, attributes={}, regions=[]))
+
+type of operands: <class 'xdsl.ir.core.OpOperands'>
+
+v----------------------v
+
+type: <class 'xdsl.ir.core.OpResult'> op: <OpResult[memref<10x2xindex>] index: 0, operation: memref.alloc, uses: 2>
+
+^----------------------^
+
+
+results: [<OpResult[memref<1x1xindex>] index: 0, operation: memref.subview, uses: 0>]
+
+type of results: <class 'list'>
+
+v----------------------v
+
+type: <class 'xdsl.ir.core.OpResult'> res: <OpResult[memref<1x1xindex>] index: 0, operation: memref.subview, uses: 0>
+
+^----------------------^
+```
+
+### why am i getting an error where operands is not iterable??
 
 ```
 Subview(_operands=(<BlockArgument[memref<16x16xi8>] index: 0, uses: 1>, <BlockArgument[index] index: 0, uses: 1>, <BlockArgument[index] index: 0, uses: 1>), results=[<OpResult[memref<2x16xi8, strided<[16, 1], offset: ?>>] index: 0, operation: memref.subview, uses: 0>], successors=[], properties={'static_offsets': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=())), elt_type=IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=())), 'static_sizes': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=())), elt_type=IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=())), 'static_strides': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=())), elt_type=IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=())), 'sizes': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=2), IntAttr(data=16)))), elt_type=IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=2), IntAttr(data=16)))), 'strides': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=1), IntAttr(data=1)))), elt_type=IntegerType(parameters=(IntAttr(data=64), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=64), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=1), IntAttr(data=1)))), 'operandSegmentSizes': DenseArrayBase(parameters=(IntegerType(parameters=(IntAttr(data=32), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=32), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), ArrayAttr(data=(IntAttr(data=1), IntAttr(data=2), IntAttr(data=0), IntAttr(data=0)))), elt_type=IntegerType(parameters=(IntAttr(data=32), SignednessAttr(data=<Signedness.SIGNLESS: 0>)), width=IntAttr(data=32), signedness=SignednessAttr(data=<Signedness.SIGNLESS: 0>)), data=ArrayAttr(data=(IntAttr(data=1), IntAttr(data=2), IntAttr(data=0), IntAttr(data=0))))}, attributes={}, regions=[])
