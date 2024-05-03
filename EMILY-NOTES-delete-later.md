@@ -55,11 +55,11 @@ Do:
 After editing printer a bit, output looks like:
 
 ```
-%subview = memref.subview(source)[offsets] [sizes] [strides] 
-: <source type> to <result type>
+%subview = memref.subview %arg0 [%arg5,%arg4]  [2, 16]  [1, 1]  
+: (memref<16x16xi8>, index, index) -> memref<2x16xi8, strided<[16, 1], offset: ?>>
 ```
 
-^ Just need to replace strings with the corresponding parts now!
+^ Just need to fix source type now!
 
 ## Python Object for Custom Subview vs. Generic Subview
 

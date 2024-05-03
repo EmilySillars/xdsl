@@ -535,30 +535,52 @@ class Subview(IRDLOperation):
 
     def print(self, printer: Printer):
         print("\nHOODLE!!\n")
-        # print(f'MY operands field has length {str(len(self.operands))}\n')
-        #  print(f'\tinside print, subviews type is {str(type(self))}\n')
-        printer.print("(")
-        printer.print("source")
-        # printer.print_operand(self.operands[0])
-        # printer.print_list(self.operands, printer.print_operand)
-        printer.print(")")
-        printer.print("[")
-        printer.print("offsets")
-        printer.print("]")
+        print(f" attributes are {str(self.attributes)}\n")
+        print(f' properties are {str(self.properties["operandSegmentSizes"])}\n')
         printer.print(" ")
-        printer.print("[")
-        printer.print("sizes")
-        printer.print("]")
-        printer.print(" ")
-        printer.print("[")
-        printer.print("strides")
-        printer.print("]")
+        op_sizes = self.properties["operandSegmentSizes"].as_tuple()
+        # source is definitely an operand
+        # offsets, sizes, and strides MIGHT be operands
+        for i in range(len(op_sizes)):
+            print(f"arg {str(i)} has {str(op_sizes[i])} elts\n")
+            if op_sizes[i] == 1:
+                printer.print_operand(self.operands[i])
+            elif op_sizes[i] > 1:
+                printer.print(" [")
+                for j in range(op_sizes[i]):
+                    print(f"\t{str(j)}\n")
+                    printer.print_operand(self.operands[i + j])
+                    if j + 1 != op_sizes[i]:
+                        printer.print(",")
+                printer.print("] ")
+
+        # offsets, sizes, and strides MIGHT be properties
+        maybe_props = ["offsets", "sizes", "strides"]
+        for maybe in maybe_props:
+            prop = self.properties.get(maybe)
+            if prop is not None:
+                printer.print(" [")
+                printer.print_list(prop.as_tuple(), printer.print)
+                printer.print("] ")
+
+        # print non-empty attributes
+        for prop in self.attributes:
+            nm = prop[0]
+            val = prop[1]
+            if nm not in maybe_props:
+                print(f"val is {str(val)}\n")
+                if len(val.as_tuple() > 0):
+                    printer._print_attr_string(prop)
+                    print(f"attr is {str(nm)} {str(val)}\n")
+            # _print_attr_string
+
         printer.print(" ")
         printer.print(": ")
-        printer.print("<source type>")
-        printer.print(" ")
-        printer.print("to ")
-        printer.print("<result type>")
+        # printer.print("<source type>")
+        # printer.print(" ")
+        # printer.print("to ")
+        # printer.print("<result type>")
+        printer.print_operation_type(self)
         return printer
 
     #  return printer.print_op_with_default_format(self)
