@@ -1,0 +1,743 @@
+[0/2] Re-checking globbed directories...
+[0/8] Performing build step for 'codegen'
+[0/2] Re-checking globbed directories...
+[1/5] Building CXX object iree-configuration/iree/compiler/plugins/Quidditch/src/Quidditch/Target/CMakeFiles/Quidditch_Target_Passes.objects.dir/TensorTile.cpp.o
+[2/5] Linking CXX static library iree-configuration/iree/lib/libQuidditch_Target_Passes.a
+[3/5] Linking CXX shared library iree-configuration/iree/lib/libIREECompiler.so
+[4/5] Linking CXX executable iree-configuration/iree/tools/iree-compile
+[5/5] Linking CXX executable tools/quidditch-opt
+[2/8] No install step for 'codegen'
+[2/8] No test step for 'codegen'
+[4/8] Completed 'codegen'
+[4/8] Performing build step for 'runtime'
+[0/2] Re-checking globbed directories...
+[0/41] Updating iree-compile
+[0/2] Re-checking globbed directories...
+ninja: no work to do.
+[2/41] Generating simple_add/simple_add_module.h, simple_add/simple_add.o, simple_add/simple_add.h, simple_add/simple_add_llvm.h
+[3/41] Building C object samples/vec_multiply/CMakeFiles/vec_multiply.dir/main.c.obj
+[4/41] Building C object samples/vec_multiply/CMakeFiles/simple_add.dir/simple_add/simple_add_module.c.obj
+[5/41] Linking C static library samples/vec_multiply/libsimple_add.a
+[6/41] Generating pumpkin/pumpkin_module.h, pumpkin/pumpkin.o, pumpkin/pumpkin.h, pumpkin/pumpkin_llvm.h
+[7/41] Building C object samples/calabaza/CMakeFiles/calabaza.dir/main.c.obj
+[8/41] Building C object samples/calabaza/CMakeFiles/pumpkin.dir/pumpkin/pumpkin_module.c.obj
+[9/41] Generating nsnet2_llvm/nsnet2_llvm_module.h, nsnet2_llvm/nsnet2_llvm.h, nsnet2_llvm/nsnet2_llvm.o
+[10/41] Linking C static library samples/calabaza/libpumpkin.a
+[11/41] Building C object samples/nsnet2/CMakeFiles/NsNet2LLVM.dir/NsNet2LLVM.c.obj
+[12/41] Generating pamplemousse/pamplemousse_module.h, pamplemousse/pamplemousse.o, pamplemousse/pamplemousse.h, pamplemousse/pamplemousse_llvm.h
+[13/41] Building C object samples/pomelo/CMakeFiles/pamplemousse.dir/pamplemousse/pamplemousse_module.c.obj
+[14/41] Generating grapeFruit_llvm/grapeFruit_llvm_module.h, grapeFruit_llvm/grapeFruit_llvm.h, grapeFruit_llvm/grapeFruit_llvm.o
+[15/41] Building C object samples/pomelo/CMakeFiles/pomelo.dir/main.c.obj
+[16/41] Building C object samples/grapeFruit/CMakeFiles/GrapeFruitLLVM.dir/GrapeFruitLLVM.c.obj
+[17/41] Linking C static library samples/pomelo/libpamplemousse.a
+[18/41] Building C object samples/nsnet2/CMakeFiles/nsnet2_llvm.dir/nsnet2_llvm/nsnet2_llvm_module.c.obj
+[19/41] Building C object samples/grapeFruit/CMakeFiles/grapeFruit_llvm.dir/grapeFruit_llvm/grapeFruit_llvm_module.c.obj
+[20/41] Linking C static library samples/nsnet2/libnsnet2_llvm.a
+[21/41] Linking C static library samples/grapeFruit/libgrapeFruit_llvm.a
+[22/41] Generating big_matvec/big_matvec_module.h, big_matvec/big_matvec.o, big_matvec/big_matvec.h, big_matvec/big_matvec_llvm.h
+[23/41] Building C object samples/big_matvec/CMakeFiles/big_matvec.dir/big_matvec/big_matvec_module.c.obj
+[24/41] Building C object samples/big_matvec/CMakeFiles/big_matvec_sample.dir/main.c.obj
+[25/41] Linking C static library samples/big_matvec/libbig_matvec.a
+[26/41] Linking C executable samples/vec_multiply/vec_multiply
+[27/41] Linking C executable samples/calabaza/calabaza
+[28/41] Linking C executable samples/pomelo/pomelo
+[29/41] Linking C executable samples/nsnet2/NsNet2LLVM
+[30/41] Linking C executable samples/grapeFruit/GrapeFruitLLVM
+[31/41] Linking C executable samples/big_matvec/big_matvec_sample
+[32/41] Generating nsnet2/nsnet2_module.h, nsnet2/nsnet2.o, nsnet2/nsnet2.h, nsnet2/nsnet2_llvm.h, nsnet2/nsnet2_llvm.o
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:112:0: warning: Failed to translate kernel with xDSL
+/home/hoppip/Quidditch/runtime/samples/nsnet2/NsNet2.py:90:0: note: called from
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:112:0: note: see current operation: 
+quidditch_snitch.memref.microkernel(<<UNKNOWN SSA VALUE>>, <<UNKNOWN SSA VALUE>>, <<UNKNOWN SSA VALUE>>) : memref<1x21xf64, strided<[168, 1], offset: ?>>, memref<1x21xf64, strided<[168, 1], offset: ?>>, memref<1x21xf64, strided<[168, 1], offset: ?>> {
+^bb0(%arg0: memref<1x21xf64, strided<[168, 1], offset: ?>>, %arg1: memref<1x21xf64, strided<[168, 1], offset: ?>>, %arg2: memref<1x21xf64, strided<[168, 1], offset: ?>>):
+  %cst = arith.constant 1.000000e+00 : f64
+  linalg.generic {indexing_maps = [affine_map<(d0, d1) -> (d0, d1)>, affine_map<(d0, d1) -> (d0, d1)>, affine_map<(d0, d1) -> (d0, d1)>], iterator_types = ["parallel", "parallel"]} ins(%arg0, %arg1 : memref<1x21xf64, strided<[168, 1], offset: ?>>, memref<1x21xf64, strided<[168, 1], offset: ?>>) outs(%arg2 : memref<1x21xf64, strided<[168, 1], offset: ?>>) {
+  ^bb0(%in: f64, %in_0: f64, %out: f64):
+    %0 = arith.addf %in, %in_0 : f64
+    %1 = arith.negf %0 : f64
+    %2 = math.exp %1 : f64
+    %3 = arith.addf %2, %cst : f64
+    %4 = arith.divf %cst, %3 : f64
+    linalg.yield %4 : f64
+  }
+}
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:112:0: note: stderr:
+Traceback (most recent call last):
+  File "/home/hoppip/Quidditch/xdsl/xdsl/tools/command_line_tool.py", line 534, in parse_chunk
+    return self.available_frontends[file_extension](chunk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/tools/command_line_tool.py", line 520, in parse_mlir
+    ).parse_module(not self.args.no_implicit_module)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 127, in parse_module
+    if (parsed_op := self.parse_optional_operation()) is not None:
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 675, in parse_optional_operation
+    return self.parse_operation()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 702, in parse_operation
+    op = op_type.parse(self)
+         ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/dialects/func.py", line 138, in parse
+    ) = parse_func_op_like(
+        ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/dialects/utils.py", line 239, in parse_func_op_like
+    region = parser.parse_optional_region(entry_args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 539, in parse_optional_region
+    self._parse_block_body(entry_block)
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 217, in _parse_block_body
+    while (op := self.parse_optional_operation()) is not None:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 675, in parse_optional_operation
+    return self.parse_operation()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 702, in parse_operation
+    op = op_type.parse(self)
+         ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/dialects/linalg.py", line 354, in parse
+    body = parser.parse_region()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 594, in parse_region
+    region = self.parse_optional_region(arguments)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 558, in parse_optional_region
+    block = self._parse_block()
+            ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 247, in _parse_block
+    self._parse_block_body(block)
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 217, in _parse_block_body
+    while (op := self.parse_optional_operation()) is not None:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 675, in parse_optional_operation
+    return self.parse_operation()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 702, in parse_operation
+    op = op_type.parse(self)
+         ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/ir/core.py", line 869, in parse
+    parser.raise_error(f"Operation {cls.name} does not have a custom format.")
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/base_parser.py", line 107, in raise_error
+    raise ParseError(at_position, msg)
+xdsl.utils.exceptions.ParseError: stdin:7:18
+    %2 = math.exp %1 : f64
+                  ^^
+                  Operation math.exp does not have a custom format.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/hoppip/Quidditch/venv/bin/xdsl-opt", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/tools/xdsl_opt.py", line 5, in main
+    xDSLOptMain().run()
+  File "/home/hoppip/Quidditch/xdsl/xdsl/xdsl_opt_main.py", line 71, in run
+    module = self.parse_chunk(chunk, file_extension, offset)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/tools/command_line_tool.py", line 541, in parse_chunk
+    raise Exception("Failed to parse:\n" + e.with_context()) from e
+Exception: Failed to parse:
+stdin:7:18
+    %2 = math.exp %1 : f64
+                  ^^
+                  Operation math.exp does not have a custom format.
+
+
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:47:0: warning: Failed to translate kernel with xDSL
+/home/hoppip/Quidditch/runtime/samples/nsnet2/NsNet2.py:90:0: note: called from
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:47:0: note: see current operation: 
+quidditch_snitch.memref.microkernel(<<UNKNOWN SSA VALUE>>, <<UNKNOWN SSA VALUE>>, <<UNKNOWN SSA VALUE>>, <<UNKNOWN SSA VALUE>>, <<UNKNOWN SSA VALUE>>, <<UNKNOWN SSA VALUE>>, <<UNKNOWN SSA VALUE>>, <<UNKNOWN SSA VALUE>>) : memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>> {
+^bb0(%arg0: memref<50xf64, strided<[1], offset: ?>>, %arg1: memref<50xf64, strided<[1], offset: ?>>, %arg2: memref<50xf64, strided<[1], offset: ?>>, %arg3: memref<50xf64, strided<[1], offset: ?>>, %arg4: memref<50xf64, strided<[1], offset: ?>>, %arg5: memref<50xf64, strided<[1], offset: ?>>, %arg6: memref<50xf64, strided<[1], offset: ?>>, %arg7: memref<50xf64, strided<[1], offset: ?>>):
+  %cst = arith.constant 1.000000e+00 : f64
+  linalg.generic {indexing_maps = [affine_map<(d0) -> (d0)>, affine_map<(d0) -> (d0)>, affine_map<(d0) -> (d0)>, affine_map<(d0) -> (d0)>, affine_map<(d0) -> (d0)>, affine_map<(d0) -> (d0)>, affine_map<(d0) -> (d0)>, affine_map<(d0) -> (d0)>], iterator_types = ["parallel"]} ins(%arg0, %arg1, %arg2, %arg3, %arg4, %arg5, %arg6 : memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>) outs(%arg7 : memref<50xf64, strided<[1], offset: ?>>) {
+  ^bb0(%in: f64, %in_0: f64, %in_1: f64, %in_2: f64, %in_3: f64, %in_4: f64, %in_5: f64, %out: f64):
+    %0 = arith.addf %in_4, %in_5 : f64
+    %1 = arith.addf %in_2, %in_3 : f64
+    %2 = arith.negf %1 : f64
+    %3 = math.exp %2 : f64
+    %4 = arith.addf %3, %cst : f64
+    %5 = arith.divf %cst, %4 : f64
+    %6 = arith.mulf %in_1, %5 : f64
+    %7 = arith.addf %in_0, %6 : f64
+    %8 = math.tanh %7 : f64
+    %9 = arith.negf %0 : f64
+    %10 = math.exp %9 : f64
+    %11 = arith.addf %10, %cst : f64
+    %12 = arith.divf %cst, %11 : f64
+    %13 = arith.subf %in, %8 : f64
+    %14 = arith.mulf %13, %12 : f64
+    %15 = arith.addf %14, %8 : f64
+    linalg.yield %15 : f64
+  }
+}
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:47:0: note: stderr:
+Traceback (most recent call last):
+  File "/home/hoppip/Quidditch/xdsl/xdsl/tools/command_line_tool.py", line 534, in parse_chunk
+    return self.available_frontends[file_extension](chunk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/tools/command_line_tool.py", line 520, in parse_mlir
+    ).parse_module(not self.args.no_implicit_module)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 127, in parse_module
+    if (parsed_op := self.parse_optional_operation()) is not None:
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 675, in parse_optional_operation
+    return self.parse_operation()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 702, in parse_operation
+    op = op_type.parse(self)
+         ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/dialects/func.py", line 138, in parse
+    ) = parse_func_op_like(
+        ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/dialects/utils.py", line 239, in parse_func_op_like
+    region = parser.parse_optional_region(entry_args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 539, in parse_optional_region
+    self._parse_block_body(entry_block)
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 217, in _parse_block_body
+    while (op := self.parse_optional_operation()) is not None:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 675, in parse_optional_operation
+    return self.parse_operation()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 702, in parse_operation
+    op = op_type.parse(self)
+         ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/dialects/linalg.py", line 354, in parse
+    body = parser.parse_region()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 594, in parse_region
+    region = self.parse_optional_region(arguments)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 558, in parse_optional_region
+    block = self._parse_block()
+            ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 247, in _parse_block
+    self._parse_block_body(block)
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 217, in _parse_block_body
+    while (op := self.parse_optional_operation()) is not None:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 675, in parse_optional_operation
+    return self.parse_operation()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 702, in parse_operation
+    op = op_type.parse(self)
+         ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/ir/core.py", line 869, in parse
+    parser.raise_error(f"Operation {cls.name} does not have a custom format.")
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/base_parser.py", line 107, in raise_error
+    raise ParseError(at_position, msg)
+xdsl.utils.exceptions.ParseError: stdin:8:18
+    %3 = math.exp %2 : f64
+                  ^^
+                  Operation math.exp does not have a custom format.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/hoppip/Quidditch/venv/bin/xdsl-opt", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/tools/xdsl_opt.py", line 5, in main
+    xDSLOptMain().run()
+  File "/home/hoppip/Quidditch/xdsl/xdsl/xdsl_opt_main.py", line 71, in run
+    module = self.parse_chunk(chunk, file_extension, offset)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/tools/command_line_tool.py", line 541, in parse_chunk
+    raise Exception("Failed to parse:\n" + e.with_context()) from e
+Exception: Failed to parse:
+stdin:8:18
+    %3 = math.exp %2 : f64
+                  ^^
+                  Operation math.exp does not have a custom format.
+
+
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:105:0: warning: SLICEDCUCUMBER tiling level L1 This is the rewritten kernel!!!!!
+
+/home/hoppip/Quidditch/runtime/samples/nsnet2/NsNet2.py:90:0: note: called from
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:105:0: note: see current operation: 
+func.func @main$async_dispatch_8_matmul_transpose_b_1x600x600_f64() attributes {translation_info = #iree_codegen.translation_info<None>} {
+  %cst = arith.constant 0.000000e+00 : f64
+  %c0 = arith.constant 0 : index
+  %c17841600 = arith.constant 17841600 : index
+  %c20721600 = arith.constant 20721600 : index
+  %c4800 = arith.constant 4800 : index
+  %0 = hal.interface.binding.subspan set(0) binding(0) type(storage_buffer) alignment(64) offset(%c0) flags(ReadOnly) : !flow.dispatch.tensor<readonly:tensor<1x600xf64>>
+  %1 = hal.interface.binding.subspan set(0) binding(1) type(storage_buffer) alignment(64) offset(%c17841600) flags(ReadOnly) : !flow.dispatch.tensor<readonly:tensor<600x600xf64>>
+  %2 = hal.interface.binding.subspan set(0) binding(1) type(storage_buffer) alignment(64) offset(%c20721600) flags(ReadOnly) : !flow.dispatch.tensor<readonly:tensor<1x600xf64>>
+  %3 = hal.interface.binding.subspan set(0) binding(2) type(storage_buffer) alignment(64) offset(%c4800) : !flow.dispatch.tensor<writeonly:tensor<1x600xf64>>
+  %4 = flow.dispatch.tensor.load %3, offsets = [0, 0], sizes = [1, 600], strides = [1, 1] : !flow.dispatch.tensor<writeonly:tensor<1x600xf64>> -> tensor<1x600xf64>
+  %5 = flow.dispatch.tensor.load %0, offsets = [0, 0], sizes = [1, 600], strides = [1, 1] : !flow.dispatch.tensor<readonly:tensor<1x600xf64>> -> tensor<1x600xf64>
+  %6 = flow.dispatch.tensor.load %1, offsets = [0, 0], sizes = [600, 600], strides = [1, 1] : !flow.dispatch.tensor<readonly:tensor<600x600xf64>> -> tensor<600x600xf64>
+  %7 = flow.dispatch.tensor.load %2, offsets = [0, 0], sizes = [1, 600], strides = [1, 1] : !flow.dispatch.tensor<readonly:tensor<1x600xf64>> -> tensor<1x600xf64>
+  %8 = tensor.empty() : tensor<1x600xf64>
+  %9 = linalg.fill ins(%cst : f64) outs(%8 : tensor<1x600xf64>) -> tensor<1x600xf64>
+  %c0_0 = arith.constant 0 : index
+  %c600 = arith.constant 600 : index
+  %c100 = arith.constant 100 : index
+  %10 = scf.for %arg0 = %c0_0 to %c600 step %c100 iter_args(%arg1 = %9) -> (tensor<1x600xf64>) {
+    %c0_1 = arith.constant 0 : index
+    %c600_2 = arith.constant 600 : index
+    %c40 = arith.constant 40 : index
+    %12 = scf.for %arg2 = %c0_1 to %c600_2 step %c40 iter_args(%arg3 = %arg1) -> (tensor<1x600xf64>) {
+      %extracted_slice = tensor.extract_slice %5[0, %arg0] [1, 100] [1, 1] : tensor<1x600xf64> to tensor<1x100xf64>
+      %extracted_slice_3 = tensor.extract_slice %6[%arg2, %arg0] [40, 100] [1, 1] : tensor<600x600xf64> to tensor<40x100xf64>
+      %extracted_slice_4 = tensor.extract_slice %arg3[0, %arg2] [1, 40] [1, 1] : tensor<1x600xf64> to tensor<1x40xf64>
+      %13 = linalg.matmul_transpose_b {lowering_config = #quidditch_snitch.lowering_config<l1_tiles = [0, 40, 100], l1_tiles_interchange = [2, 0, 1], dual_buffer = true>} ins(%extracted_slice, %extracted_slice_3 : tensor<1x100xf64>, tensor<40x100xf64>) outs(%extracted_slice_4 : tensor<1x40xf64>) -> tensor<1x40xf64>
+      %inserted_slice = tensor.insert_slice %13 into %arg3[0, %arg2] [1, 40] [1, 1] : tensor<1x40xf64> into tensor<1x600xf64>
+      scf.yield %inserted_slice : tensor<1x600xf64>
+    }
+    scf.yield %12 : tensor<1x600xf64>
+  }
+  %11 = linalg.generic {indexing_maps = [affine_map<(d0, d1) -> (d0, d1)>, affine_map<(d0, d1) -> (d0, d1)>, affine_map<(d0, d1) -> (d0, d1)>], iterator_types = ["parallel", "parallel"]} ins(%10, %7 : tensor<1x600xf64>, tensor<1x600xf64>) outs(%4 : tensor<1x600xf64>) {
+  ^bb0(%in: f64, %in_1: f64, %out: f64):
+    %12 = arith.addf %in, %in_1 : f64
+    %13 = arith.cmpf ugt, %12, %cst : f64
+    %14 = arith.select %13, %12, %cst : f64
+    linalg.yield %14 : f64
+  } -> tensor<1x600xf64>
+  flow.dispatch.tensor.store %11, %3, offsets = [0, 0], sizes = [1, 600], strides = [1, 1] : tensor<1x600xf64> -> !flow.dispatch.tensor<writeonly:tensor<1x600xf64>>
+  return
+}
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:105:0: warning: SLICEDCUCUMBER tiling level Thread This is the rewritten kernel!!!!!
+
+/home/hoppip/Quidditch/runtime/samples/nsnet2/NsNet2.py:90:0: note: called from
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:105:0: note: see current operation: 
+func.func @main$async_dispatch_8_matmul_transpose_b_1x600x600_f64() attributes {translation_info = #iree_codegen.translation_info<None>} {
+  %c40 = arith.constant 40 : index
+  %c100 = arith.constant 100 : index
+  %c600 = arith.constant 600 : index
+  %cst = arith.constant 0.000000e+00 : f64
+  %c0 = arith.constant 0 : index
+  %c17841600 = arith.constant 17841600 : index
+  %c20721600 = arith.constant 20721600 : index
+  %c4800 = arith.constant 4800 : index
+  %0 = hal.interface.binding.subspan set(0) binding(0) type(storage_buffer) alignment(64) offset(%c0) flags(ReadOnly) : !flow.dispatch.tensor<readonly:tensor<1x600xf64>>
+  %1 = hal.interface.binding.subspan set(0) binding(1) type(storage_buffer) alignment(64) offset(%c17841600) flags(ReadOnly) : !flow.dispatch.tensor<readonly:tensor<600x600xf64>>
+  %2 = hal.interface.binding.subspan set(0) binding(1) type(storage_buffer) alignment(64) offset(%c20721600) flags(ReadOnly) : !flow.dispatch.tensor<readonly:tensor<1x600xf64>>
+  %3 = hal.interface.binding.subspan set(0) binding(2) type(storage_buffer) alignment(64) offset(%c4800) : !flow.dispatch.tensor<writeonly:tensor<1x600xf64>>
+  %4 = flow.dispatch.tensor.load %3, offsets = [0, 0], sizes = [1, 600], strides = [1, 1] : !flow.dispatch.tensor<writeonly:tensor<1x600xf64>> -> tensor<1x600xf64>
+  %5 = flow.dispatch.tensor.load %0, offsets = [0, 0], sizes = [1, 600], strides = [1, 1] : !flow.dispatch.tensor<readonly:tensor<1x600xf64>> -> tensor<1x600xf64>
+  %6 = flow.dispatch.tensor.load %1, offsets = [0, 0], sizes = [600, 600], strides = [1, 1] : !flow.dispatch.tensor<readonly:tensor<600x600xf64>> -> tensor<600x600xf64>
+  %7 = flow.dispatch.tensor.load %2, offsets = [0, 0], sizes = [1, 600], strides = [1, 1] : !flow.dispatch.tensor<readonly:tensor<1x600xf64>> -> tensor<1x600xf64>
+  %8 = tensor.empty() : tensor<1x600xf64>
+  %result, %token = dma.start_tensor_copy of %8 to #quidditch_snitch.l1_encoding  -> tensor<1x600xf64>
+  %9 = dma.wait_for_tensor_copy of %8 : tensor<1x600xf64> to %result using %token -> tensor<1x600xf64>
+  %10 = scf.forall (%arg0) = (0) to (600) step (75) shared_outs(%arg1 = %9) -> (tensor<1x600xf64>) {
+    %extracted_slice = tensor.extract_slice %arg1[0, %arg0] [1, 75] [1, 1] : tensor<1x600xf64> to tensor<1x75xf64>
+    %16 = linalg.fill ins(%cst : f64) outs(%extracted_slice : tensor<1x75xf64>) -> tensor<1x75xf64>
+    scf.forall.in_parallel {
+      tensor.parallel_insert_slice %16 into %arg1[0, %arg0] [1, 75] [1, 1] : tensor<1x75xf64> into tensor<1x600xf64>
+    }
+  }
+  %11 = scf.for %arg0 = %c0 to %c600 step %c100 iter_args(%arg1 = %10) -> (tensor<1x600xf64>) {
+    %extracted_slice = tensor.extract_slice %5[0, %arg0] [1, 100] [1, 1] : tensor<1x600xf64> to tensor<1x100xf64>
+    %result_6, %token_7 = dma.start_tensor_copy of %extracted_slice to #quidditch_snitch.l1_encoding  -> tensor<1x100xf64>
+    %16 = dma.wait_for_tensor_copy of %extracted_slice : tensor<1x100xf64> to %result_6 using %token_7 -> tensor<1x100xf64>
+    %17 = quidditch_snitch.pipeline %c0 to %c600 step %c40 inits(%arg1) -> tensor<1x600xf64> {
+    ^bb0(%arg2: index, %arg3: tensor<1x600xf64>):
+      %extracted_slice_8 = tensor.extract_slice %6[%arg2, %arg0] [40, 100] [1, 1] : tensor<600x600xf64> to tensor<40x100xf64>
+      %result_9, %token_10 = dma.start_tensor_copy of %extracted_slice_8 to #quidditch_snitch.l1_encoding  -> tensor<40x100xf64>
+      %extracted_slice_11 = tensor.extract_slice %arg3[0, %arg2] [1, 40] [1, 1] : tensor<1x600xf64> to tensor<1x40xf64>
+      %result_12, %token_13 = dma.start_tensor_copy of %extracted_slice_11 to #quidditch_snitch.l1_encoding  -> tensor<1x40xf64>
+      quidditch_snitch.pipeline_yield %arg3, %extracted_slice_8, %result_9, %token_10, %extracted_slice_11, %result_12, %token_13 : tensor<1x600xf64>, tensor<40x100xf64>, tensor<40x100xf64>, !dma.token, tensor<1x40xf64>, tensor<1x40xf64>, !dma.token
+    }, {
+    ^bb0(%arg2: index, %arg3: tensor<1x600xf64>, %arg4: tensor<40x100xf64>, %arg5: tensor<40x100xf64>, %arg6: !dma.token, %arg7: tensor<1x40xf64>, %arg8: tensor<1x40xf64>, %arg9: !dma.token):
+      %18 = dma.wait_for_tensor_copy of %arg4 : tensor<40x100xf64> to %arg5 using %arg6 -> tensor<40x100xf64>
+      %19 = dma.wait_for_tensor_copy of %arg7 : tensor<1x40xf64> to %arg8 using %arg9 -> tensor<1x40xf64>
+      %20 = scf.forall (%arg10) = (0) to (40) step (5) shared_outs(%arg11 = %19) -> (tensor<1x40xf64>) {
+        %extracted_slice_8 = tensor.extract_slice %16[0, 0] [1, 100] [1, 1] : tensor<1x100xf64> to tensor<1x100xf64>
+        %extracted_slice_9 = tensor.extract_slice %18[%arg10, 0] [5, 100] [1, 1] : tensor<40x100xf64> to tensor<5x100xf64>
+        %extracted_slice_10 = tensor.extract_slice %arg11[0, %arg10] [1, 5] [1, 1] : tensor<1x40xf64> to tensor<1x5xf64>
+        %21 = linalg.matmul_transpose_b {lowering_config = #quidditch_snitch.lowering_config<l1_tiles = [0, 40, 100], l1_tiles_interchange = [2, 0, 1], dual_buffer = true>} ins(%extracted_slice_8, %extracted_slice_9 : tensor<1x100xf64>, tensor<5x100xf64>) outs(%extracted_slice_10 : tensor<1x5xf64>) -> tensor<1x5xf64>
+        scf.forall.in_parallel {
+          tensor.parallel_insert_slice %21 into %arg11[0, %arg10] [1, 5] [1, 1] : tensor<1x5xf64> into tensor<1x40xf64>
+        }
+      }
+      %inserted_slice = tensor.insert_slice %20 into %arg3[0, %arg2] [1, 40] [1, 1] : tensor<1x40xf64> into tensor<1x600xf64>
+      quidditch_snitch.pipeline_yield %inserted_slice : tensor<1x600xf64>
+    }
+    scf.yield %17 : tensor<1x600xf64>
+  }
+  %result_0, %token_1 = dma.start_tensor_copy of %11 to #quidditch_snitch.l1_encoding  -> tensor<1x600xf64>
+  %12 = dma.wait_for_tensor_copy of %11 : tensor<1x600xf64> to %result_0 using %token_1 -> tensor<1x600xf64>
+  %result_2, %token_3 = dma.start_tensor_copy of %7 to #quidditch_snitch.l1_encoding  -> tensor<1x600xf64>
+  %13 = dma.wait_for_tensor_copy of %7 : tensor<1x600xf64> to %result_2 using %token_3 -> tensor<1x600xf64>
+  %result_4, %token_5 = dma.start_tensor_copy of %4 to #quidditch_snitch.l1_encoding  -> tensor<1x600xf64>
+  %14 = dma.wait_for_tensor_copy of %4 : tensor<1x600xf64> to %result_4 using %token_5 -> tensor<1x600xf64>
+  %15 = scf.forall (%arg0) = (0) to (600) step (75) shared_outs(%arg1 = %14) -> (tensor<1x600xf64>) {
+    %extracted_slice = tensor.extract_slice %12[0, %arg0] [1, 75] [1, 1] : tensor<1x600xf64> to tensor<1x75xf64>
+    %extracted_slice_6 = tensor.extract_slice %13[0, %arg0] [1, 75] [1, 1] : tensor<1x600xf64> to tensor<1x75xf64>
+    %extracted_slice_7 = tensor.extract_slice %arg1[0, %arg0] [1, 75] [1, 1] : tensor<1x600xf64> to tensor<1x75xf64>
+    %16 = linalg.generic {indexing_maps = [affine_map<(d0, d1) -> (d0, d1)>, affine_map<(d0, d1) -> (d0, d1)>, affine_map<(d0, d1) -> (d0, d1)>], iterator_types = ["parallel", "parallel"]} ins(%extracted_slice, %extracted_slice_6 : tensor<1x75xf64>, tensor<1x75xf64>) outs(%extracted_slice_7 : tensor<1x75xf64>) {
+    ^bb0(%in: f64, %in_8: f64, %out: f64):
+      %17 = arith.addf %in, %in_8 : f64
+      %18 = arith.cmpf ugt, %17, %cst : f64
+      %19 = arith.select %18, %17, %cst : f64
+      linalg.yield %19 : f64
+    } -> tensor<1x75xf64>
+    scf.forall.in_parallel {
+      tensor.parallel_insert_slice %16 into %arg1[0, %arg0] [1, 75] [1, 1] : tensor<1x75xf64> into tensor<1x600xf64>
+    }
+  }
+  flow.dispatch.tensor.store %15, %3, offsets = [0, 0], sizes = [1, 600], strides = [1, 1] : tensor<1x600xf64> -> !flow.dispatch.tensor<writeonly:tensor<1x600xf64>>
+  return
+}
+[33/41] Building C object samples/nsnet2/CMakeFiles/NsNet2.dir/NsNet2.c.obj
+[34/41] Building C object samples/nsnet2/CMakeFiles/nsnet2.dir/nsnet2/nsnet2_module.c.obj
+[35/41] Linking C static library samples/nsnet2/libnsnet2.a
+[36/41] Linking C executable samples/nsnet2/NsNet2
+[37/41] Generating grapeFruit/grapeFruit_module.h, grapeFruit/grapeFruit.o, grapeFruit/grapeFruit.h, grapeFruit/grapeFruit_llvm.h, grapeFruit/grapeFruit_llvm.o
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:47:0: warning: Failed to translate kernel with xDSL
+/home/hoppip/Quidditch/runtime/samples/grapeFruit/grapeFruit.py:90:0: note: called from
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:47:0: note: see current operation: 
+quidditch_snitch.memref.microkernel(<<UNKNOWN SSA VALUE>>, <<UNKNOWN SSA VALUE>>, <<UNKNOWN SSA VALUE>>, <<UNKNOWN SSA VALUE>>, <<UNKNOWN SSA VALUE>>, <<UNKNOWN SSA VALUE>>, <<UNKNOWN SSA VALUE>>, <<UNKNOWN SSA VALUE>>) : memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>> {
+^bb0(%arg0: memref<50xf64, strided<[1], offset: ?>>, %arg1: memref<50xf64, strided<[1], offset: ?>>, %arg2: memref<50xf64, strided<[1], offset: ?>>, %arg3: memref<50xf64, strided<[1], offset: ?>>, %arg4: memref<50xf64, strided<[1], offset: ?>>, %arg5: memref<50xf64, strided<[1], offset: ?>>, %arg6: memref<50xf64, strided<[1], offset: ?>>, %arg7: memref<50xf64, strided<[1], offset: ?>>):
+  %cst = arith.constant 1.000000e+00 : f64
+  linalg.generic {indexing_maps = [affine_map<(d0) -> (d0)>, affine_map<(d0) -> (d0)>, affine_map<(d0) -> (d0)>, affine_map<(d0) -> (d0)>, affine_map<(d0) -> (d0)>, affine_map<(d0) -> (d0)>, affine_map<(d0) -> (d0)>, affine_map<(d0) -> (d0)>], iterator_types = ["parallel"]} ins(%arg0, %arg1, %arg2, %arg3, %arg4, %arg5, %arg6 : memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>, memref<50xf64, strided<[1], offset: ?>>) outs(%arg7 : memref<50xf64, strided<[1], offset: ?>>) {
+  ^bb0(%in: f64, %in_0: f64, %in_1: f64, %in_2: f64, %in_3: f64, %in_4: f64, %in_5: f64, %out: f64):
+    %0 = arith.addf %in_4, %in_5 : f64
+    %1 = arith.addf %in_2, %in_3 : f64
+    %2 = arith.negf %1 : f64
+    %3 = math.exp %2 : f64
+    %4 = arith.addf %3, %cst : f64
+    %5 = arith.divf %cst, %4 : f64
+    %6 = arith.mulf %in_1, %5 : f64
+    %7 = arith.addf %in_0, %6 : f64
+    %8 = math.tanh %7 : f64
+    %9 = arith.negf %0 : f64
+    %10 = math.exp %9 : f64
+    %11 = arith.addf %10, %cst : f64
+    %12 = arith.divf %cst, %11 : f64
+    %13 = arith.subf %in, %8 : f64
+    %14 = arith.mulf %13, %12 : f64
+    %15 = arith.addf %14, %8 : f64
+    linalg.yield %15 : f64
+  }
+}
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:47:0: note: stderr:
+Traceback (most recent call last):
+  File "/home/hoppip/Quidditch/xdsl/xdsl/tools/command_line_tool.py", line 534, in parse_chunk
+    return self.available_frontends[file_extension](chunk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/tools/command_line_tool.py", line 520, in parse_mlir
+    ).parse_module(not self.args.no_implicit_module)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 127, in parse_module
+    if (parsed_op := self.parse_optional_operation()) is not None:
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 675, in parse_optional_operation
+    return self.parse_operation()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 702, in parse_operation
+    op = op_type.parse(self)
+         ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/dialects/func.py", line 138, in parse
+    ) = parse_func_op_like(
+        ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/dialects/utils.py", line 239, in parse_func_op_like
+    region = parser.parse_optional_region(entry_args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 539, in parse_optional_region
+    self._parse_block_body(entry_block)
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 217, in _parse_block_body
+    while (op := self.parse_optional_operation()) is not None:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 675, in parse_optional_operation
+    return self.parse_operation()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 702, in parse_operation
+    op = op_type.parse(self)
+         ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/dialects/linalg.py", line 354, in parse
+    body = parser.parse_region()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 594, in parse_region
+    region = self.parse_optional_region(arguments)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 558, in parse_optional_region
+    block = self._parse_block()
+            ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 247, in _parse_block
+    self._parse_block_body(block)
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 217, in _parse_block_body
+    while (op := self.parse_optional_operation()) is not None:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 675, in parse_optional_operation
+    return self.parse_operation()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 702, in parse_operation
+    op = op_type.parse(self)
+         ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/ir/core.py", line 869, in parse
+    parser.raise_error(f"Operation {cls.name} does not have a custom format.")
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/base_parser.py", line 107, in raise_error
+    raise ParseError(at_position, msg)
+xdsl.utils.exceptions.ParseError: stdin:8:18
+    %3 = math.exp %2 : f64
+                  ^^
+                  Operation math.exp does not have a custom format.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/hoppip/Quidditch/venv/bin/xdsl-opt", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/tools/xdsl_opt.py", line 5, in main
+    xDSLOptMain().run()
+  File "/home/hoppip/Quidditch/xdsl/xdsl/xdsl_opt_main.py", line 71, in run
+    module = self.parse_chunk(chunk, file_extension, offset)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/tools/command_line_tool.py", line 541, in parse_chunk
+    raise Exception("Failed to parse:\n" + e.with_context()) from e
+Exception: Failed to parse:
+stdin:8:18
+    %3 = math.exp %2 : f64
+                  ^^
+                  Operation math.exp does not have a custom format.
+
+
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:105:0: warning: SLICEDCUCUMBER tiling level L1 This is the rewritten kernel!!!!!
+
+/home/hoppip/Quidditch/runtime/samples/grapeFruit/grapeFruit.py:90:0: note: called from
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:105:0: note: see current operation: 
+func.func @main$async_dispatch_8_matmul_transpose_b_1x600x600_f64() attributes {translation_info = #iree_codegen.translation_info<None>} {
+  %cst = arith.constant 0.000000e+00 : f64
+  %c0 = arith.constant 0 : index
+  %c17841600 = arith.constant 17841600 : index
+  %c20721600 = arith.constant 20721600 : index
+  %c4800 = arith.constant 4800 : index
+  %0 = hal.interface.binding.subspan set(0) binding(0) type(storage_buffer) alignment(64) offset(%c0) flags(ReadOnly) : !flow.dispatch.tensor<readonly:tensor<1x600xf64>>
+  %1 = hal.interface.binding.subspan set(0) binding(1) type(storage_buffer) alignment(64) offset(%c17841600) flags(ReadOnly) : !flow.dispatch.tensor<readonly:tensor<600x600xf64>>
+  %2 = hal.interface.binding.subspan set(0) binding(1) type(storage_buffer) alignment(64) offset(%c20721600) flags(ReadOnly) : !flow.dispatch.tensor<readonly:tensor<1x600xf64>>
+  %3 = hal.interface.binding.subspan set(0) binding(2) type(storage_buffer) alignment(64) offset(%c4800) : !flow.dispatch.tensor<writeonly:tensor<1x600xf64>>
+  %4 = flow.dispatch.tensor.load %3, offsets = [0, 0], sizes = [1, 600], strides = [1, 1] : !flow.dispatch.tensor<writeonly:tensor<1x600xf64>> -> tensor<1x600xf64>
+  %5 = flow.dispatch.tensor.load %0, offsets = [0, 0], sizes = [1, 600], strides = [1, 1] : !flow.dispatch.tensor<readonly:tensor<1x600xf64>> -> tensor<1x600xf64>
+  %6 = flow.dispatch.tensor.load %1, offsets = [0, 0], sizes = [600, 600], strides = [1, 1] : !flow.dispatch.tensor<readonly:tensor<600x600xf64>> -> tensor<600x600xf64>
+  %7 = flow.dispatch.tensor.load %2, offsets = [0, 0], sizes = [1, 600], strides = [1, 1] : !flow.dispatch.tensor<readonly:tensor<1x600xf64>> -> tensor<1x600xf64>
+  %8 = tensor.empty() : tensor<1x600xf64>
+  %9 = linalg.fill ins(%cst : f64) outs(%8 : tensor<1x600xf64>) -> tensor<1x600xf64>
+  %c0_0 = arith.constant 0 : index
+  %c600 = arith.constant 600 : index
+  %c100 = arith.constant 100 : index
+  %10 = scf.for %arg0 = %c0_0 to %c600 step %c100 iter_args(%arg1 = %9) -> (tensor<1x600xf64>) {
+    %c0_1 = arith.constant 0 : index
+    %c600_2 = arith.constant 600 : index
+    %c40 = arith.constant 40 : index
+    %12 = scf.for %arg2 = %c0_1 to %c600_2 step %c40 iter_args(%arg3 = %arg1) -> (tensor<1x600xf64>) {
+      %extracted_slice = tensor.extract_slice %5[0, %arg0] [1, 100] [1, 1] : tensor<1x600xf64> to tensor<1x100xf64>
+      %extracted_slice_3 = tensor.extract_slice %6[%arg2, %arg0] [40, 100] [1, 1] : tensor<600x600xf64> to tensor<40x100xf64>
+      %extracted_slice_4 = tensor.extract_slice %arg3[0, %arg2] [1, 40] [1, 1] : tensor<1x600xf64> to tensor<1x40xf64>
+      %13 = linalg.matmul_transpose_b {lowering_config = #quidditch_snitch.lowering_config<l1_tiles = [0, 40, 100], l1_tiles_interchange = [2, 0, 1], dual_buffer = true>} ins(%extracted_slice, %extracted_slice_3 : tensor<1x100xf64>, tensor<40x100xf64>) outs(%extracted_slice_4 : tensor<1x40xf64>) -> tensor<1x40xf64>
+      %inserted_slice = tensor.insert_slice %13 into %arg3[0, %arg2] [1, 40] [1, 1] : tensor<1x40xf64> into tensor<1x600xf64>
+      scf.yield %inserted_slice : tensor<1x600xf64>
+    }
+    scf.yield %12 : tensor<1x600xf64>
+  }
+  %11 = linalg.generic {indexing_maps = [affine_map<(d0, d1) -> (d0, d1)>, affine_map<(d0, d1) -> (d0, d1)>, affine_map<(d0, d1) -> (d0, d1)>], iterator_types = ["parallel", "parallel"]} ins(%10, %7 : tensor<1x600xf64>, tensor<1x600xf64>) outs(%4 : tensor<1x600xf64>) {
+  ^bb0(%in: f64, %in_1: f64, %out: f64):
+    %12 = arith.addf %in, %in_1 : f64
+    %13 = arith.cmpf ugt, %12, %cst : f64
+    %14 = arith.select %13, %12, %cst : f64
+    linalg.yield %14 : f64
+  } -> tensor<1x600xf64>
+  flow.dispatch.tensor.store %11, %3, offsets = [0, 0], sizes = [1, 600], strides = [1, 1] : tensor<1x600xf64> -> !flow.dispatch.tensor<writeonly:tensor<1x600xf64>>
+  return
+}
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:105:0: warning: SLICEDCUCUMBER tiling level Thread This is the rewritten kernel!!!!!
+
+/home/hoppip/Quidditch/runtime/samples/grapeFruit/grapeFruit.py:90:0: note: called from
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:105:0: note: see current operation: 
+func.func @main$async_dispatch_8_matmul_transpose_b_1x600x600_f64() attributes {translation_info = #iree_codegen.translation_info<None>} {
+  %c40 = arith.constant 40 : index
+  %c100 = arith.constant 100 : index
+  %c600 = arith.constant 600 : index
+  %cst = arith.constant 0.000000e+00 : f64
+  %c0 = arith.constant 0 : index
+  %c17841600 = arith.constant 17841600 : index
+  %c20721600 = arith.constant 20721600 : index
+  %c4800 = arith.constant 4800 : index
+  %0 = hal.interface.binding.subspan set(0) binding(0) type(storage_buffer) alignment(64) offset(%c0) flags(ReadOnly) : !flow.dispatch.tensor<readonly:tensor<1x600xf64>>
+  %1 = hal.interface.binding.subspan set(0) binding(1) type(storage_buffer) alignment(64) offset(%c17841600) flags(ReadOnly) : !flow.dispatch.tensor<readonly:tensor<600x600xf64>>
+  %2 = hal.interface.binding.subspan set(0) binding(1) type(storage_buffer) alignment(64) offset(%c20721600) flags(ReadOnly) : !flow.dispatch.tensor<readonly:tensor<1x600xf64>>
+  %3 = hal.interface.binding.subspan set(0) binding(2) type(storage_buffer) alignment(64) offset(%c4800) : !flow.dispatch.tensor<writeonly:tensor<1x600xf64>>
+  %4 = flow.dispatch.tensor.load %3, offsets = [0, 0], sizes = [1, 600], strides = [1, 1] : !flow.dispatch.tensor<writeonly:tensor<1x600xf64>> -> tensor<1x600xf64>
+  %5 = flow.dispatch.tensor.load %0, offsets = [0, 0], sizes = [1, 600], strides = [1, 1] : !flow.dispatch.tensor<readonly:tensor<1x600xf64>> -> tensor<1x600xf64>
+  %6 = flow.dispatch.tensor.load %1, offsets = [0, 0], sizes = [600, 600], strides = [1, 1] : !flow.dispatch.tensor<readonly:tensor<600x600xf64>> -> tensor<600x600xf64>
+  %7 = flow.dispatch.tensor.load %2, offsets = [0, 0], sizes = [1, 600], strides = [1, 1] : !flow.dispatch.tensor<readonly:tensor<1x600xf64>> -> tensor<1x600xf64>
+  %8 = tensor.empty() : tensor<1x600xf64>
+  %result, %token = dma.start_tensor_copy of %8 to #quidditch_snitch.l1_encoding  -> tensor<1x600xf64>
+  %9 = dma.wait_for_tensor_copy of %8 : tensor<1x600xf64> to %result using %token -> tensor<1x600xf64>
+  %10 = scf.forall (%arg0) = (0) to (600) step (75) shared_outs(%arg1 = %9) -> (tensor<1x600xf64>) {
+    %extracted_slice = tensor.extract_slice %arg1[0, %arg0] [1, 75] [1, 1] : tensor<1x600xf64> to tensor<1x75xf64>
+    %16 = linalg.fill ins(%cst : f64) outs(%extracted_slice : tensor<1x75xf64>) -> tensor<1x75xf64>
+    scf.forall.in_parallel {
+      tensor.parallel_insert_slice %16 into %arg1[0, %arg0] [1, 75] [1, 1] : tensor<1x75xf64> into tensor<1x600xf64>
+    }
+  }
+  %11 = scf.for %arg0 = %c0 to %c600 step %c100 iter_args(%arg1 = %10) -> (tensor<1x600xf64>) {
+    %extracted_slice = tensor.extract_slice %5[0, %arg0] [1, 100] [1, 1] : tensor<1x600xf64> to tensor<1x100xf64>
+    %result_6, %token_7 = dma.start_tensor_copy of %extracted_slice to #quidditch_snitch.l1_encoding  -> tensor<1x100xf64>
+    %16 = dma.wait_for_tensor_copy of %extracted_slice : tensor<1x100xf64> to %result_6 using %token_7 -> tensor<1x100xf64>
+    %17 = quidditch_snitch.pipeline %c0 to %c600 step %c40 inits(%arg1) -> tensor<1x600xf64> {
+    ^bb0(%arg2: index, %arg3: tensor<1x600xf64>):
+      %extracted_slice_8 = tensor.extract_slice %6[%arg2, %arg0] [40, 100] [1, 1] : tensor<600x600xf64> to tensor<40x100xf64>
+      %result_9, %token_10 = dma.start_tensor_copy of %extracted_slice_8 to #quidditch_snitch.l1_encoding  -> tensor<40x100xf64>
+      %extracted_slice_11 = tensor.extract_slice %arg3[0, %arg2] [1, 40] [1, 1] : tensor<1x600xf64> to tensor<1x40xf64>
+      %result_12, %token_13 = dma.start_tensor_copy of %extracted_slice_11 to #quidditch_snitch.l1_encoding  -> tensor<1x40xf64>
+      quidditch_snitch.pipeline_yield %arg3, %extracted_slice_8, %result_9, %token_10, %extracted_slice_11, %result_12, %token_13 : tensor<1x600xf64>, tensor<40x100xf64>, tensor<40x100xf64>, !dma.token, tensor<1x40xf64>, tensor<1x40xf64>, !dma.token
+    }, {
+    ^bb0(%arg2: index, %arg3: tensor<1x600xf64>, %arg4: tensor<40x100xf64>, %arg5: tensor<40x100xf64>, %arg6: !dma.token, %arg7: tensor<1x40xf64>, %arg8: tensor<1x40xf64>, %arg9: !dma.token):
+      %18 = dma.wait_for_tensor_copy of %arg4 : tensor<40x100xf64> to %arg5 using %arg6 -> tensor<40x100xf64>
+      %19 = dma.wait_for_tensor_copy of %arg7 : tensor<1x40xf64> to %arg8 using %arg9 -> tensor<1x40xf64>
+      %20 = scf.forall (%arg10) = (0) to (40) step (5) shared_outs(%arg11 = %19) -> (tensor<1x40xf64>) {
+        %extracted_slice_8 = tensor.extract_slice %16[0, 0] [1, 100] [1, 1] : tensor<1x100xf64> to tensor<1x100xf64>
+        %extracted_slice_9 = tensor.extract_slice %18[%arg10, 0] [5, 100] [1, 1] : tensor<40x100xf64> to tensor<5x100xf64>
+        %extracted_slice_10 = tensor.extract_slice %arg11[0, %arg10] [1, 5] [1, 1] : tensor<1x40xf64> to tensor<1x5xf64>
+        %21 = linalg.matmul_transpose_b {lowering_config = #quidditch_snitch.lowering_config<l1_tiles = [0, 40, 100], l1_tiles_interchange = [2, 0, 1], dual_buffer = true>} ins(%extracted_slice_8, %extracted_slice_9 : tensor<1x100xf64>, tensor<5x100xf64>) outs(%extracted_slice_10 : tensor<1x5xf64>) -> tensor<1x5xf64>
+        scf.forall.in_parallel {
+          tensor.parallel_insert_slice %21 into %arg11[0, %arg10] [1, 5] [1, 1] : tensor<1x5xf64> into tensor<1x40xf64>
+        }
+      }
+      %inserted_slice = tensor.insert_slice %20 into %arg3[0, %arg2] [1, 40] [1, 1] : tensor<1x40xf64> into tensor<1x600xf64>
+      quidditch_snitch.pipeline_yield %inserted_slice : tensor<1x600xf64>
+    }
+    scf.yield %17 : tensor<1x600xf64>
+  }
+  %result_0, %token_1 = dma.start_tensor_copy of %11 to #quidditch_snitch.l1_encoding  -> tensor<1x600xf64>
+  %12 = dma.wait_for_tensor_copy of %11 : tensor<1x600xf64> to %result_0 using %token_1 -> tensor<1x600xf64>
+  %result_2, %token_3 = dma.start_tensor_copy of %7 to #quidditch_snitch.l1_encoding  -> tensor<1x600xf64>
+  %13 = dma.wait_for_tensor_copy of %7 : tensor<1x600xf64> to %result_2 using %token_3 -> tensor<1x600xf64>
+  %result_4, %token_5 = dma.start_tensor_copy of %4 to #quidditch_snitch.l1_encoding  -> tensor<1x600xf64>
+  %14 = dma.wait_for_tensor_copy of %4 : tensor<1x600xf64> to %result_4 using %token_5 -> tensor<1x600xf64>
+  %15 = scf.forall (%arg0) = (0) to (600) step (75) shared_outs(%arg1 = %14) -> (tensor<1x600xf64>) {
+    %extracted_slice = tensor.extract_slice %12[0, %arg0] [1, 75] [1, 1] : tensor<1x600xf64> to tensor<1x75xf64>
+    %extracted_slice_6 = tensor.extract_slice %13[0, %arg0] [1, 75] [1, 1] : tensor<1x600xf64> to tensor<1x75xf64>
+    %extracted_slice_7 = tensor.extract_slice %arg1[0, %arg0] [1, 75] [1, 1] : tensor<1x600xf64> to tensor<1x75xf64>
+    %16 = linalg.generic {indexing_maps = [affine_map<(d0, d1) -> (d0, d1)>, affine_map<(d0, d1) -> (d0, d1)>, affine_map<(d0, d1) -> (d0, d1)>], iterator_types = ["parallel", "parallel"]} ins(%extracted_slice, %extracted_slice_6 : tensor<1x75xf64>, tensor<1x75xf64>) outs(%extracted_slice_7 : tensor<1x75xf64>) {
+    ^bb0(%in: f64, %in_8: f64, %out: f64):
+      %17 = arith.addf %in, %in_8 : f64
+      %18 = arith.cmpf ugt, %17, %cst : f64
+      %19 = arith.select %18, %17, %cst : f64
+      linalg.yield %19 : f64
+    } -> tensor<1x75xf64>
+    scf.forall.in_parallel {
+      tensor.parallel_insert_slice %16 into %arg1[0, %arg0] [1, 75] [1, 1] : tensor<1x75xf64> into tensor<1x600xf64>
+    }
+  }
+  flow.dispatch.tensor.store %15, %3, offsets = [0, 0], sizes = [1, 600], strides = [1, 1] : tensor<1x600xf64> -> !flow.dispatch.tensor<writeonly:tensor<1x600xf64>>
+  return
+}
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:112:0: warning: Failed to translate kernel with xDSL
+/home/hoppip/Quidditch/runtime/samples/grapeFruit/grapeFruit.py:90:0: note: called from
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:112:0: note: see current operation: 
+quidditch_snitch.memref.microkernel(<<UNKNOWN SSA VALUE>>, <<UNKNOWN SSA VALUE>>, <<UNKNOWN SSA VALUE>>) : memref<1x21xf64, strided<[168, 1], offset: ?>>, memref<1x21xf64, strided<[168, 1], offset: ?>>, memref<1x21xf64, strided<[168, 1], offset: ?>> {
+^bb0(%arg0: memref<1x21xf64, strided<[168, 1], offset: ?>>, %arg1: memref<1x21xf64, strided<[168, 1], offset: ?>>, %arg2: memref<1x21xf64, strided<[168, 1], offset: ?>>):
+  %cst = arith.constant 1.000000e+00 : f64
+  linalg.generic {indexing_maps = [affine_map<(d0, d1) -> (d0, d1)>, affine_map<(d0, d1) -> (d0, d1)>, affine_map<(d0, d1) -> (d0, d1)>], iterator_types = ["parallel", "parallel"]} ins(%arg0, %arg1 : memref<1x21xf64, strided<[168, 1], offset: ?>>, memref<1x21xf64, strided<[168, 1], offset: ?>>) outs(%arg2 : memref<1x21xf64, strided<[168, 1], offset: ?>>) {
+  ^bb0(%in: f64, %in_0: f64, %out: f64):
+    %0 = arith.addf %in, %in_0 : f64
+    %1 = arith.negf %0 : f64
+    %2 = math.exp %1 : f64
+    %3 = arith.addf %2, %cst : f64
+    %4 = arith.divf %cst, %3 : f64
+    linalg.yield %4 : f64
+  }
+}
+<eval_with_key>.0 from /home/hoppip/Quidditch/venv/lib/python3.11/site-packages/torch/fx/experimental/proxy_tensor.py:551 in wrapped:112:0: note: stderr:
+Traceback (most recent call last):
+  File "/home/hoppip/Quidditch/xdsl/xdsl/tools/command_line_tool.py", line 534, in parse_chunk
+    return self.available_frontends[file_extension](chunk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/tools/command_line_tool.py", line 520, in parse_mlir
+    ).parse_module(not self.args.no_implicit_module)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 127, in parse_module
+    if (parsed_op := self.parse_optional_operation()) is not None:
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 675, in parse_optional_operation
+    return self.parse_operation()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 702, in parse_operation
+    op = op_type.parse(self)
+         ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/dialects/func.py", line 138, in parse
+    ) = parse_func_op_like(
+        ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/dialects/utils.py", line 239, in parse_func_op_like
+    region = parser.parse_optional_region(entry_args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 539, in parse_optional_region
+    self._parse_block_body(entry_block)
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 217, in _parse_block_body
+    while (op := self.parse_optional_operation()) is not None:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 675, in parse_optional_operation
+    return self.parse_operation()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 702, in parse_operation
+    op = op_type.parse(self)
+         ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/dialects/linalg.py", line 354, in parse
+    body = parser.parse_region()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 594, in parse_region
+    region = self.parse_optional_region(arguments)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 558, in parse_optional_region
+    block = self._parse_block()
+            ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 247, in _parse_block
+    self._parse_block_body(block)
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 217, in _parse_block_body
+    while (op := self.parse_optional_operation()) is not None:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 675, in parse_optional_operation
+    return self.parse_operation()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/core.py", line 702, in parse_operation
+    op = op_type.parse(self)
+         ^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/ir/core.py", line 869, in parse
+    parser.raise_error(f"Operation {cls.name} does not have a custom format.")
+  File "/home/hoppip/Quidditch/xdsl/xdsl/parser/base_parser.py", line 107, in raise_error
+    raise ParseError(at_position, msg)
+xdsl.utils.exceptions.ParseError: stdin:7:18
+    %2 = math.exp %1 : f64
+                  ^^
+                  Operation math.exp does not have a custom format.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/hoppip/Quidditch/venv/bin/xdsl-opt", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/tools/xdsl_opt.py", line 5, in main
+    xDSLOptMain().run()
+  File "/home/hoppip/Quidditch/xdsl/xdsl/xdsl_opt_main.py", line 71, in run
+    module = self.parse_chunk(chunk, file_extension, offset)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hoppip/Quidditch/xdsl/xdsl/tools/command_line_tool.py", line 541, in parse_chunk
+    raise Exception("Failed to parse:\n" + e.with_context()) from e
+Exception: Failed to parse:
+stdin:7:18
+    %2 = math.exp %1 : f64
+                  ^^
+                  Operation math.exp does not have a custom format.
+
+
+[38/41] Building C object samples/grapeFruit/CMakeFiles/GrapeFruit.dir/GrapeFruit.c.obj
+[39/41] Building C object samples/grapeFruit/CMakeFiles/grapeFruit.dir/grapeFruit/grapeFruit_module.c.obj
+[40/41] Linking C static library samples/grapeFruit/libgrapeFruit.a
+[41/41] Linking C executable samples/grapeFruit/GrapeFruit
+[6/8] No install step for 'runtime'
+[6/8] No test step for 'runtime'
+[8/8] Completed 'runtime'
