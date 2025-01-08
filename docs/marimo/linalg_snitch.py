@@ -124,6 +124,177 @@ def _():
 
 
 @app.cell
+def _(mo):
+    mo.md("""### Cost Model Experiments""")
+    return
+
+
+@app.cell
+def _(MLContext, Sequence, mo, module_html):
+    import argparse
+    from xdsl.xdsl_opt_main import xDSLOptMain
+    import sys
+
+    # data_file = mo.notebook_dir() / "../" / "../" / "emily-notes" / "original" / "tester.mlir"
+    # # Use the directory to read a file
+    # if data_file.exists():
+    #     print(f"Found data file: {data_file}")
+    # else:
+    #     print("No data file found")
+
+    inputFileName = "/home/hoppip/xdsl/docs/marimo/../../emily-notes/original/tester.mlir"
+    inputFileName = "/home/hoppip/xdsl/docs/marimo/../../emily-notes/weirdDims/weirdDims.mlir"
+    inputFileName = "/home/hoppip/xdsl/docs/marimo/../../emily-notes/dispatch8/dispatch8.mlir"
+    inputFileName = "/home/hoppip/xdsl/docs/marimo/../../emily-notes/dispatch8-flat-zigzag/dispatch8-flat-zz.mlir"
+
+    class xDSLOptMainWrapper(xDSLOptMain):
+
+         def __init__(
+            self,
+            description: str = "xDSL modular optimizer driver",
+            args: Sequence[str] | None = None,
+        ):
+            self.available_frontends = {}
+            self.available_passes = {}
+            self.available_targets = {}
+
+            self.ctx = MLContext()
+            super().register_all_dialects()
+            super().register_all_frontends()
+            super().register_all_passes()
+            super().register_all_targets()
+
+            ## Add custom dialects & passes here
+
+            # arg handling
+            arg_parser = argparse.ArgumentParser(description=description)
+            super().register_all_arguments(arg_parser)
+            self.args = arg_parser.parse_args(args=args)
+            self.ctx.allow_unregistered = self.args.allow_unregistered_dialect
+
+            super().setup_pipeline()
+
+         def get_module(self):
+            """
+            Executes the different steps.
+            """
+            chunks, file_extension = self.prepare_input()
+            output_stream = self.prepare_output()
+            try:
+                for i, (chunk, offset) in enumerate(chunks):
+                    try:
+                        if i > 0:
+                            output_stream.write("// -----\n")
+                        module = self.parse_chunk(chunk, file_extension, offset)
+
+                        if module is not None:
+                            chunk.close()
+                            if output_stream is not sys.stdout:
+                                output_stream.close()
+                            return module
+                            # if self.apply_passes(module):
+                            #     output_stream.write(self.output_resulting_program(module))
+                        output_stream.flush()
+                    finally:
+                        chunk.close()
+            finally:
+                if output_stream is not sys.stdout:
+                    output_stream.close()
+
+    theParser = xDSLOptMainWrapper("Read one simplified NsNet Kernel",[inputFileName])
+    theModule = theParser.get_module()
+
+    mo.md(f"""
+
+    Starter MLIR: {module_html(theModule)}
+
+    """)
+    return (
+        argparse,
+        inputFileName,
+        sys,
+        theModule,
+        theParser,
+        xDSLOptMain,
+        xDSLOptMainWrapper,
+    )
+
+
+@app.cell
+def _(mo):
+    mo.md("""#### Convert to Snitch""")
+    return
+
+
+@app.cell
+def _(
+    LOWER_MEMREF_STREAM_TO_SNITCH_STREAM_PASSES,
+    OPTIMISE_MEMREF_STREAM_PASSES,
+    PipelinePass,
+    arith_add_fastmath,
+    convert_linalg_to_memref_stream,
+    convert_riscv_scf_for_to_frep,
+    pipeline_accordion,
+    theModule,
+):
+
+    linalg_module2 = theModule
+    convert_linalg_to_snitch2 = PipelinePass(
+        [
+            convert_linalg_to_memref_stream.ConvertLinalgToMemrefStreamPass(),
+            arith_add_fastmath.AddArithFastMathFlagsPass(),
+            *OPTIMISE_MEMREF_STREAM_PASSES,
+            *LOWER_MEMREF_STREAM_TO_SNITCH_STREAM_PASSES,
+            convert_riscv_scf_for_to_frep.ConvertRiscvScfForToFrepPass(),
+        ]
+    )
+
+    snitch_stream_module2, snitch_stream_accordion2 = pipeline_accordion(
+        tuple(("", p) for p in convert_linalg_to_snitch2.passes), linalg_module2
+    )
+
+    snitch_stream_accordion2
+    return (
+        convert_linalg_to_snitch2,
+        linalg_module2,
+        snitch_stream_accordion2,
+        snitch_stream_module2,
+    )
+
+
+@app.cell
+def _(mo):
+    mo.md("""#### Actual Assembly""")
+    return
+
+
+@app.cell
+def _(
+    LOWER_SNITCH_STREAM_TO_ASM_PASSES,
+    mo,
+    pipeline_accordion,
+    riscv_code,
+    snitch_stream_module2,
+    xmo,
+):
+    snitch_asm_module3, snitch_asm_accordion3 = pipeline_accordion(
+        tuple(("", p) for p in LOWER_SNITCH_STREAM_TO_ASM_PASSES), snitch_stream_module2
+    )
+
+    snitch_asm_accordion3
+
+    snitch_asm3 = riscv_code(snitch_asm_module3)
+
+    mo.md(f"""\
+    **Snitch Assembly:**
+
+    {xmo.asm_html(snitch_asm3)}
+    """
+    )
+    return snitch_asm3, snitch_asm_accordion3, snitch_asm_module3
+
+
+@app.cell
 def _(
     AffineMap,
     AffineMapAttr,
