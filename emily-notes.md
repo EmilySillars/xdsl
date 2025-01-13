@@ -112,9 +112,9 @@ module {
 }
 ```
 
-#### Markus-Tiled version in MLIR w/o IREE-specific stuff?
+#### Tiled version [0, 40, 100] in MLIR w/o IREE-specific stuff?
 
-Copied and Pasted from `dispatch8/thread-tiling.mlir`:
+Copied and Pasted from `dispatch8-0-40-100/thread-tiling.mlir`:
 
 ```
 %21 = linalg.matmul_transpose_b {lowering_config = #quidditch_snitch.lowering_config<
@@ -153,7 +153,51 @@ module {
 }
 ```
 
-#### Flat ZigZag-Tiled version in MLIR w/o IREE-specific stuff?
+#### Tiled Version [0, 40, 120] in MLIR w/o IREE-specific stuff?
+
+Copied and pasted from `dispatch8-0-40-120/dispatch8-thread-tiling.mlir`:
+
+```
+  %21 = linalg.matmul_transpose_b {lowering_config = #quidditch_snitch.lowering_config<
+  l1_tiles = [0, 40, 120], l1_tiles_interchange = [2, 0, 1], dual_buffer = true>} 
+  ins(%extracted_slice_8, %extracted_slice_9 : tensor<1x120xf64>, tensor<5x120xf64>) 
+  outs(%extracted_slice_10 : tensor<1x5xf64>) -> tensor<1x5xf64>
+       
+```
+
+Let's use godbolt.org on the following w/ flag `--linalg-generalize-named-ops`:
+
+```
+module {
+  func.func @dispatch8_0_40_120(%V : memref<1x120xf64>, %M : memref<5x120xf64>, %O : memref<1x5xf64>) {  
+   linalg.matmul_transpose_b ins(%V, %M :  memref<1x120xf64>, memref<5x120xf64>) outs(%O : memref<1x5xf64>) -> ()
+   func.return
+  }
+}
+```
+
+Output from godbolt.org: 
+
+```
+#map = affine_map<(d0, d1, d2) -> (d0, d2)>
+#map1 = affine_map<(d0, d1, d2) -> (d1, d2)>
+#map2 = affine_map<(d0, d1, d2) -> (d0, d1)>
+module {
+  func.func @dispatch8_0_40_120(%arg0: memref<1x120xf64>, %arg1: memref<5x120xf64>, %arg2: memref<1x5xf64>) {
+    linalg.generic {indexing_maps = [#map, #map1, #map2], iterator_types = ["parallel", "parallel", "reduction"]} ins(%arg0, %arg1 : memref<1x120xf64>, memref<5x120xf64>) outs(%arg2 : memref<1x5xf64>) {
+    ^bb0(%in: f64, %in_0: f64, %out: f64):
+      %0 = arith.mulf %in, %in_0 : f64
+      %1 = arith.addf %out, %0 : f64
+      linalg.yield %1 : f64
+    }
+    return
+  }
+}
+```
+
+
+
+#### Tiled version [0, 200, 5] in MLIR w/o IREE-specific stuff?
 
 Copied and Pasted from `dispatch8-flat-zigzag/thread-level-tiling.mlir`:
 

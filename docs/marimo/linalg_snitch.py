@@ -146,6 +146,7 @@ def _(MLContext, Sequence, mo, module_html):
     inputFileName = "/home/hoppip/xdsl/docs/marimo/../../emily-notes/weirdDims/weirdDims.mlir"
     inputFileName = "/home/hoppip/xdsl/docs/marimo/../../emily-notes/dispatch8/dispatch8.mlir"
     inputFileName = "/home/hoppip/xdsl/docs/marimo/../../emily-notes/dispatch8-flat-zigzag/dispatch8-flat-zz.mlir"
+    inputFileName = "/home/hoppip/xdsl/docs/marimo/../../emily-notes/dispatch8-0-40-120/dispatch8-0-40-120.mlir"
 
     class xDSLOptMainWrapper(xDSLOptMain):
 
@@ -237,7 +238,6 @@ def _(
     pipeline_accordion,
     theModule,
 ):
-
     linalg_module2 = theModule
     convert_linalg_to_snitch2 = PipelinePass(
         [
